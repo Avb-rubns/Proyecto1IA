@@ -10,7 +10,7 @@ export default function useModal() {
   };
 
   const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
+    setModalText("Registrando");
     setConfirmLoading(true);
     setTimeout(() => {
       setVisible(false);
