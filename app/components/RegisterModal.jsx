@@ -27,7 +27,7 @@ export default function RegisterModal(props) {
       >
         <Form name="register" layout="vertical">
           {/* Info basic*/}
-          <Row gutter={[40, 48]}>
+          <Row gutter={[40, 15]}>
             <Col className="gutter-row" span={8}>
               <Form.Item
                 label="Nombre"
@@ -97,7 +97,7 @@ export default function RegisterModal(props) {
           <Space>
             <Text strong>Direccón</Text>
           </Space>
-          <Row gutter={[40, 48]}>
+          <Row gutter={[40, 15]}>
             <Col className="gutter-row" span={8}>
               <Form.Item
                 label="Nombre de la calle"
