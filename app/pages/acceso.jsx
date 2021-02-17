@@ -40,7 +40,7 @@ export default function Home() {
           style={{ background: blue[0] }}
         >
           <Form
-            name="basic"
+            name="login"
             initialValues={{ remember: true }}
             className={styles["form-container"]}
             layout="vertical"
