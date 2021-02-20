@@ -14,10 +14,11 @@ import Image from "next/image";
 import styles from "../styles/acceso.module.css";
 import RegisterModal from "../components/RegisterModal";
 import useModal from "../hooks/useModal";
+import { useState } from "react";
 
 const { Title } = Typography;
 
-export default function Home() {
+export default function Login() {
   const {
     handleOk,
     handleCancel,
@@ -26,6 +27,23 @@ export default function Home() {
     visible,
     showModal,
   } = useModal();
+
+  const [form, setForm] = useState({ username: "", password: "" });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const onSubmit = async (event) => {
+    const result = await fetch("http://localhost:3000/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ form }),
+    }).then((res) => res.json());
+    console.log(result);
+  };
 
   return (
     <Template title="Acceso">
@@ -44,6 +62,7 @@ export default function Home() {
             initialValues={{ remember: true }}
             className={styles["form-container"]}
             layout="vertical"
+            onFinish={onSubmit}
           >
             <Title style={{ textAlign: "center" }}>dLine</Title>
             <Form.Item
@@ -53,7 +72,12 @@ export default function Home() {
                 { required: true, message: "¡Porfavor ingrese su Correo!" },
               ]}
             >
-              <Input placeholder="Ingrese su correo" />
+              <Input
+                placeholder="Ingrese su correo"
+                value={form.username}
+                onChange={handleChange}
+                name="username"
+              />
             </Form.Item>
 
             <Form.Item
@@ -63,7 +87,12 @@ export default function Home() {
                 { required: true, message: "¡Porfavor ingrese su contraseña!" },
               ]}
             >
-              <Input.Password placeholder="Ingrese su contraseña" />
+              <Input.Password
+                name="password"
+                placeholder="Ingrese su contraseña"
+                value={form.userpass}
+                onChange={handleChange}
+              />
             </Form.Item>
             <Form.Item className={styles["a"]}>
               <Tooltip title="¿Resetear contraseña?">

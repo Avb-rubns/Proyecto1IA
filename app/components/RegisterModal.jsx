@@ -9,7 +9,6 @@ import {
   InputNumber,
 } from "antd";
 import ReactDOM from "react-dom";
-import useModal from "../hooks/useModal";
 
 const { Text } = Typography;
 
@@ -138,6 +137,20 @@ export default function RegisterModal(props) {
                 ]}
               >
                 <InputNumber />
+              </Form.Item>
+            </Col>
+            <Col className="gutter-row" span={4}>
+              <Form.Item
+                label="Código Postal"
+                name="postal"
+                rules={[
+                  {
+                    required: true,
+                    message: "¡Porfavor ingrese el código postal!",
+                  },
+                ]}
+              >
+                <InputNumber placeholder="0000" />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
