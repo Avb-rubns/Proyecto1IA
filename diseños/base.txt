@@ -1,0 +1,18 @@
+Datos a guardar
+
+nombre
+apellido
+telefono
+
+direccion
+
+nombre de calle
+colonia
+número ext
+ciudad o municipio
+estado
+
+guardar ruta a seguri
+
+punto de inicio y los puntos a seguir
+

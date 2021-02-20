@@ -1,0 +1,14 @@
+.container {
+  margin: 5rem 4.5rem;
+  padding: auto 3rem;
+  text-align: center;
+}
+.container-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+.container-background {
+  background: white;
+}
