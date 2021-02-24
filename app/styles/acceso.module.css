@@ -28,3 +28,7 @@
   justify-content: center;
   margin-top: -1.5rem;
 }
+.btn-space {
+  display: flex;
+  justify-content: space-evenly;
+}
