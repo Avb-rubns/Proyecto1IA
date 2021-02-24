@@ -150,7 +150,10 @@ export default function PlanModal(props) {
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
                     <Form.Item>
-                      <Button value="large"> Cancelar</Button>
+                      <Button value="large" onClick={props.handleCancel}>
+                        {" "}
+                        Cancelar
+                      </Button>
                       <Button value="large" type="primary" htmlType="submit">
                         agregar
                       </Button>
@@ -169,6 +172,6 @@ export default function PlanModal(props) {
         </Layout>
       </Modal>
     </>,
-    document.getElementById("plan-modal-container")
+    document.getElementById("modal-container")
   );
 }

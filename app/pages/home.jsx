@@ -12,14 +12,14 @@ import {
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
 import { blue } from "@ant-design/colors";
 import styles from "../styles/planear.module.css";
-import usePlan from "../hooks/usePlan";
+import useModal from "../hooks/useModal";
 import PlanModal from "../components/PlanModal";
 
 const { Header, Content, Sider } = Layout;
 const { Title } = Typography;
 
 export default function Home(props) {
-  const { modalText, visible, showModal, handleCancel } = usePlan();
+  const { visible, showModal, handleCancel } = useModal();
   return (
     <Template title="Home">
       <Layout>
@@ -86,7 +86,6 @@ export default function Home(props) {
         <PlanModal
           visible={visible}
           handleCancel={handleCancel}
-          modalText={modalText}
           visible={visible}
           showModal={showModal}
         />
