@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import styles from "../styles/planear.module.css";
 import {
   Modal,
@@ -10,11 +11,12 @@ import {
   Typography,
   InputNumber,
   Button,
+  Divider,
 } from "antd";
 
 const { Header, Sider, Content } = Layout;
 const colCounts = {};
-const { Text } = Typography;
+const { Title, Text } = Typography;
 
 export default function PlanModal(props) {
   return ReactDOM.createPortal(
@@ -28,11 +30,20 @@ export default function PlanModal(props) {
         style={{ paddingTop: 0 }}
       >
         <Layout>
-          <Form name="plan" layout="vertical">
-            <Layout>
-              <Header style={{ background: "white", paddingTop: 0 }}>
-                Información de entrega
-              </Header>
+          <Header
+            style={{
+              background: "white",
+              paddingTop: 0,
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <Title level={4}>Información de la entrega</Title>
+            <Divider type="vertical" />
+            <Title level={4}>Entregas</Title>
+          </Header>
+          <Layout>
+            <Form name="plan" layout="vertical">
               <Content style={{ background: "white", paddingTop: 0 }}>
                 <Row className={styles["container-info"]} gutter={(48, 8)}>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
@@ -150,25 +161,40 @@ export default function PlanModal(props) {
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
                     <Form.Item>
-                      <Button value="large" onClick={props.handleCancel}>
-                        {" "}
-                        Cancelar
-                      </Button>
-                      <Button value="large" type="primary" htmlType="submit">
-                        agregar
-                      </Button>
+                      <div className={styles["btn-space"]}>
+                        <Button value="small" onClick={props.handleCancel}>
+                          {" "}
+                          Cancelar
+                        </Button>
+                        <Button value="large" type="primary" htmlType="submit">
+                          agregar
+                        </Button>
+                      </div>
                     </Form.Item>
                   </Col>
                 </Row>
               </Content>
-            </Layout>
-          </Form>
-          <Sider theme="light">
-            <Text strong>Ant Design (strong)</Text>
-            <Row>
-              <Col xs={{ span: 24 }}></Col>
-            </Row>
-          </Sider>
+            </Form>
+            <Sider theme="light">
+              <Row gutter={[8, 16]} style={{ textAlign: "justify-all" }}>
+                {/* se insertan las tarjetas*/}
+                <Col span={20}>
+                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
+                    <Text strong style={{ paddingRight: "1rem" }}>
+                      DPTA-6231-AX21
+                    </Text>
+                    <Text>5 Km</Text>
+                  </div>
+                  <Text>Avenida las flores</Text>
+                </Col>
+                <Col span={4}>
+                  <Button type="text" icon={<EditOutlined />}></Button>
+                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
+                </Col>
+                <Divider style={{ margin: 0 }} />
+              </Row>
+            </Sider>
+          </Layout>
         </Layout>
       </Modal>
     </>,
