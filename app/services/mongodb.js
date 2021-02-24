@@ -23,18 +23,29 @@ export class MongoDBService {
   }
 
   async login(user) {
-    const User = mongoose.model("User", userSchema);
-    const result = await User.findOne({ email: user.username });
-    console.log(result);
-    return result;
+    try {
+      const User = mongoose.model("User", userSchema);
+      const result = await User.findOne({
+        email: user.username,
+        password: user.password,
+      });
+      console.log(result);
+      return result;
+    } catch (error) {
+      return result;
+    }
   }
 
   async register(form) {
-    const User = mongoose.model("User", userSchema);
-    const userNew = new User({ ...form });
-    console.log(userNew);
-    const result = await userNew.save();
-    console.log(result);
-    return result;
+    try {
+      const User = mongoose.model("User", userSchema);
+      const userNew = new User({ ...form });
+      console.log(userNew);
+      const result = await userNew.save();
+      console.log(result);
+      return result;
+    } catch (error) {
+      return result;
+    }
   }
 }

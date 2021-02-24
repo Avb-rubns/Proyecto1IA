@@ -55,6 +55,7 @@ export default function Login() {
         body: JSON.stringify({ data }),
       }
     ).then((res) => res.json());
+    handleCancel();
     console.log({ ResultadoOn: result });
   };
 
