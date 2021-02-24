@@ -1,21 +1,15 @@
 import Template from "../components/Template";
-import {
-  Layout,
-  Menu,
-  Button,
-  PageHeader,
-  Col,
-  Row,
-  Typography,
-  Image,
-} from "antd";
+import { Layout, Menu, Col, Row, Typography } from "antd";
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
-import { blue } from "@ant-design/colors";
 import styles from "../styles/planear.module.css";
 import useModal from "../hooks/useModal";
 import PlanModal from "../components/PlanModal";
+import Image from "next/image";
+import Nav from "../components/Nav";
+import HeadPlanRoute from "..//components/HeadPlanRoute";
+import HeadRoute from "../components/HeadRoute";
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 const { Title } = Typography;
 
 export default function Home(props) {
@@ -23,10 +17,7 @@ export default function Home(props) {
   return (
     <Template title="Home">
       <Layout>
-        <Header style={{ background: blue[5], alignItems: "center" }}>
-          <i src="/logo.png"></i>
-          <Title level={5}>Dline</Title>
-        </Header>
+        <Nav name={props.name} exit={props.exit} />
         <Layout>
           <Sider>
             <Menu
@@ -52,20 +43,8 @@ export default function Home(props) {
             style={{ height: "100%", borderRight: 1, background: "white" }}
           >
             {/*Aqui el header*/}
-            <PageHeader
-              ghost={false}
-              title="Planea una ruta"
-              extra={[
-                <Button
-                  key="1"
-                  value="default"
-                  type="primary"
-                  onClick={showModal}
-                >
-                  Planear Ruta
-                </Button>,
-              ]}
-            ></PageHeader>
+            {/*<HeadPlanRoute showModal={showModal} />*/}
+            <HeadRoute showModal={showModal} />
             {/* Aqui se ponen los modulos*/}
             <Row style={{ height: "100vh" }}>
               <Col className={styles["container"]} span={24}>
@@ -76,6 +55,8 @@ export default function Home(props) {
                 <Image
                   className={styles["image-container"]}
                   src="/images/wait.png"
+                  height={500}
+                  width={600}
                 />
               </Col>
             </Row>
