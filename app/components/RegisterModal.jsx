@@ -1,41 +1,66 @@
-import {
-  Modal,
-  Typography,
-  Form,
-  Input,
-  Row,
-  Col,
-  Space,
-  InputNumber,
-} from "antd";
+import { Modal, Typography, Form, Input, Row, Col, Space, Button } from "antd";
 import ReactDOM from "react-dom";
+import { useState } from "react";
+import styles from "../styles/acceso.module.css";
 
 const { Text } = Typography;
 
 export default function RegisterModal(props) {
+  const [formR, setForm] = useState({
+    name: "",
+    lastname: "",
+    cell: "",
+    password: "",
+    nameaddress: "",
+    colonia: "",
+    numhouse: "",
+    codepostal: "",
+    city: "",
+    state: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...formR, [name]: value });
+  };
+  const onKeyPressEvent = (event) => {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+    if (!new RegExp("[0-9]").test(keyValue)) event.preventDefault();
+    return;
+  };
   return ReactDOM.createPortal(
     <>
       <Modal
         title="Registro"
         visible={props.visible}
-        okText="Registrar"
-        onOk={props.handleOk}
-        confirmLoading={props.confirmLoading}
+        footer={null}
+        destroyOnClose={true}
         onCancel={props.handleCancel}
         width={"100vh"}
       >
-        <Form name="register" layout="vertical">
+        <Form
+          name="register"
+          initialValues={{ remember: true }}
+          layout="vertical"
+          onFinish={props.handleOk}
+        >
           {/* Info basic*/}
           <Row gutter={[40, 15]}>
             <Col className="gutter-row" span={8}>
               <Form.Item
                 label="Nombre"
-                name="username"
+                name="name"
                 rules={[
                   { required: true, message: "¡Porfavor ingrese su nombre!" },
                 ]}
               >
-                <Input placeholder="Ingrese su nombre" />
+                <Input
+                  placeholder="Ingrese su nombre"
+                  name="name"
+                  value={formR.name}
+                  onChange={handleChange}
+                />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
@@ -49,7 +74,12 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese sus apellidos" />
+                <Input
+                  placeholder="Ingrese sus apellidos"
+                  name="lastname"
+                  value={formR.lastname}
+                  onChange={handleChange}
+                />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
@@ -63,18 +93,29 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese sus apellidos" />
+                <Input
+                  placeholder="Ingrese sus telefono"
+                  name="cell"
+                  value={formR.cell}
+                  onChange={handleChange}
+                  onKeyPress={onKeyPressEvent}
+                />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
               <Form.Item
                 label="Correo"
-                name="username"
+                name="email"
                 rules={[
                   { required: true, message: "¡Porfavor ingrese su Correo!" },
                 ]}
               >
-                <Input placeholder="Ingrese su correo" />
+                <Input
+                  placeholder="Ingrese su correo"
+                  name="email"
+                  value={formR.email}
+                  onChange={handleChange}
+                />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
@@ -88,7 +129,12 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input.Password placeholder="Ingrese su contraseña" />
+                <Input.Password
+                  placeholder="Ingrese su contraseña"
+                  name="password"
+                  value={formR.password}
+                  onChange={handleChange}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -100,7 +146,7 @@ export default function RegisterModal(props) {
             <Col className="gutter-row" span={8}>
               <Form.Item
                 label="Nombre de la calle"
-                name="address"
+                name="nameaddress"
                 rules={[
                   {
                     required: true,
@@ -108,13 +154,18 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese el nombre de la calle" />
+                <Input
+                  placeholder="Ingrese el nombre de la calle"
+                  name="nameaddress"
+                  value={formR.nameaddress}
+                  onChange={handleChange}
+                />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
               <Form.Item
                 label="Cólonia"
-                name="namecolonis"
+                name="colonia"
                 rules={[
                   {
                     required: true,
@@ -122,10 +173,15 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese el nombre de la cólonia" />
+                <Input
+                  placeholder="Ingrese el nombre de la cólonia"
+                  name="colonia"
+                  value={formR.colonia}
+                  onChange={handleChange}
+                />
               </Form.Item>
             </Col>
-            <Col className="gutter-row" xs>
+            <Col className="gutter-row" span={5}>
               <Form.Item
                 label="Número exterio o interior"
                 name="numhouse"
@@ -136,13 +192,18 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <InputNumber />
+                <Input
+                  name="numhouse"
+                  value={formR.numhouse}
+                  onChange={handleChange}
+                  onKeyPress={onKeyPressEvent}
+                />
               </Form.Item>
             </Col>
-            <Col className="gutter-row" span={4}>
+            <Col className="gutter-row" span={5}>
               <Form.Item
                 label="Código Postal"
-                name="postal"
+                name="codepostal"
                 rules={[
                   {
                     required: true,
@@ -150,7 +211,13 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <InputNumber placeholder="0000" />
+                <Input
+                  placeholder="0000"
+                  name="codepostal"
+                  value={formR.codepostal}
+                  onChange={handleChange}
+                  onKeyPress={onKeyPressEvent}
+                />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
@@ -165,7 +232,12 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese el nombre de la ciudad o municipio" />
+                <Input
+                  placeholder="Ingrese el nombre de la ciudad o municipio"
+                  value={formR.city}
+                  name="city"
+                  onChange={handleChange}
+                />
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
@@ -179,13 +251,31 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese el nombre del estado" />
+                <Input
+                  placeholder="Ingrese el nombre del estado"
+                  value={formR.state}
+                  name="state"
+                  onChange={handleChange}
+                />
+              </Form.Item>
+            </Col>
+            <Col className={"gutter-row"} span={24}>
+              <Form.Item>
+                <div className={styles["btn-space"]}>
+                  <Button value="large" onClick={props.handleCancel}>
+                    {" "}
+                    Cancelar
+                  </Button>
+                  <Button value="large" type="primary" htmlType="submit">
+                    Registrarse
+                  </Button>
+                </div>
               </Form.Item>
             </Col>
           </Row>
         </Form>
       </Modal>
     </>,
-    document.getElementById("register-modal-container")
+    document.getElementById("modal-container")
   );
 }

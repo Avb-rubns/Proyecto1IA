@@ -2,14 +2,25 @@ import { MongoDBService } from "../../services/mongodb";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    const { form } = req.body;
-    const service = new MongoDBService();
-    await service.login(form);
-    res.status(200).send({ result: form });
+    const { register } = req.query;
+    //console.log(register);
+    if (register) {
+      const { data } = req.body;
+      console.log({ recibiendoda: data });
+      const service = new MongoDBService();
+      const result = await service.register(data);
+      service.close();
+      res.status(200).send({ result: result });
+    } else {
+      const { form } = req.body;
+      const service = new MongoDBService();
+      const result = await service.login(form);
+      service.close();
+      res.status(200).send({ result: result });
+    }
   } else {
-    res.status(200).send({
-      result:
-        "David es malo no me quiere ayudar, bueno si pero no a mira ya no se lo que scribo a de ser porque esto pero esta de mas mira yo no se ",
+    res.status(404).send({
+      result: "error!! ",
     });
   }
 }
