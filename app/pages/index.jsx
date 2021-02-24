@@ -1,11 +1,52 @@
-import Template from '../components/Template'
-import {Button} from 'antd'
-import styles from '../styles/Home.module.css'
+import Template from "../components/Template";
+import styles from "../styles/Home.module.css";
+import { Layout, Menu, Col, Row, Typography } from "antd";
+import Nav from "../components/Nav";
+import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
 
-export default function Home() {
+const { Content, Sider } = Layout;
+
+export default function Home(props) {
   return (
     <Template title="Página de Inició">
-      <Button type="primary">Holi</Button>
+      <Layout>
+        <Nav name={props.name}></Nav>
+        <Layout>
+          <Sider>
+            <Menu
+              defaultSelectedKeys={["1"]}
+              defaultOpenKeys={["sub1"]}
+              mode="inline"
+              style={{
+                height: "100%",
+                borderRight: 1,
+                paddingTop: "1.22rem",
+                background: "white",
+              }}
+            >
+              <Menu.Item key="1" icon={<SendOutlined />} onClick={props.logica}>
+                <strong>Lógistica de Rutas</strong>
+              </Menu.Item>
+              <Menu.Item
+                key="2"
+                icon={<CodepenOutlined />}
+                onClick={props.table}
+              >
+                <strong>Paquetes</strong>
+              </Menu.Item>
+            </Menu>
+          </Sider>
+          <Content
+            style={{ height: "100%", borderRight: 1, background: "white" }}
+          >
+            {/*Aqui el header*/}
+            {/* Aqui se ponen los modulos*/}
+            <Row style={{ height: "100vh" }}>
+              <Col className={styles["container"]} span={24}></Col>
+            </Row>
+          </Content>
+        </Layout>
+      </Layout>
     </Template>
-  )
+  );
 }

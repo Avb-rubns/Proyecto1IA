@@ -12,3 +12,11 @@
 .container-background {
   background: white;
 }
+.btn-space {
+  display: flex;
+  justify-content: space-evenly;
+}
+.info-avatar {
+  display: flex;
+  align-items: baseline;
+}
