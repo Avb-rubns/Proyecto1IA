@@ -1,7 +1,6 @@
 import Template from "../components/Template";
 import { Layout, Menu, Col, Row, Typography } from "antd";
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
-import styles from "../styles/planear.module.css";
 import useModal from "../hooks/useModal";
 import PlanModal from "../components/PlanModal";
 import Image from "next/image";
@@ -40,26 +39,13 @@ export default function Home(props) {
             </Menu>
           </Sider>
           <Content
-            style={{ height: "100%", borderRight: 1, background: "white" }}
+            style={{ height: "100vh", borderRight: 1, background: "white" }}
           >
             {/*Aqui el header*/}
-            {/*<HeadPlanRoute showModal={showModal} />*/}
-            <HeadRoute showModal={showModal} />
+            <HeadPlanRoute showModal={showModal} />
+            {/*<HeadRoute showModal={showModal} />*/}
             {/* Aqui se ponen los modulos*/}
-            <Row style={{ height: "100vh" }}>
-              <Col className={styles["container"]} span={24}>
-                <Title level={4}>
-                  Aun no tienes una ruta planeada de entrega , Puedes crear una
-                  😁
-                </Title>
-                <Image
-                  className={styles["image-container"]}
-                  src="/images/wait.png"
-                  height={500}
-                  width={600}
-                />
-              </Col>
-            </Row>
+            <div></div>
           </Content>
         </Layout>
       </Layout>

@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom";
+import { useState } from "react";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import styles from "../styles/planear.module.css";
 import {
@@ -9,7 +10,6 @@ import {
   Input,
   Layout,
   Typography,
-  InputNumber,
   Button,
   Divider,
 } from "antd";
@@ -19,6 +19,37 @@ const colCounts = {};
 const { Title, Text } = Typography;
 
 export default function PlanModal(props) {
+  const [entrega, setForm] = useState({
+    username: "",
+    lastname: "",
+    nameaddress: "",
+    colonia: "",
+    numhouse: "",
+    codepostal: "",
+    city: "",
+    state: "",
+  });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...entrega, [name]: value });
+  };
+  const onKeyPressEvent = (event) => {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+    if (!new RegExp("[0-9]").test(keyValue)) event.preventDefault();
+    return;
+  };
+
+  const onSubmitAdd = async () => {
+    const result = await fetch("http://localhost:3000/api/direction", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ entrega }),
+    }).then((res) => res.json());
+    console.log(result);
+  };
   return ReactDOM.createPortal(
     <>
       <Modal
@@ -57,7 +88,12 @@ export default function PlanModal(props) {
                         },
                       ]}
                     >
-                      <Input placeholder="Ingrese el nombre del cliente" />
+                      <Input
+                        placeholder="Ingrese el nombre del cliente"
+                        onChange={handleChange}
+                        name="username"
+                        value={entrega.username}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
@@ -71,7 +107,12 @@ export default function PlanModal(props) {
                         },
                       ]}
                     >
-                      <Input placeholder="Ingrese el o los apellidos del cliente" />
+                      <Input
+                        placeholder="Ingrese el o los apellidos del cliente"
+                        onChange={handleChange}
+                        name="lastname"
+                        value={entrega.lastname}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
@@ -85,21 +126,31 @@ export default function PlanModal(props) {
                         },
                       ]}
                     >
-                      <Input placeholder="Ingrese el nombre de la calle" />
+                      <Input
+                        placeholder="Ingrese el nombre de la calle"
+                        onChange={handleChange}
+                        name="nameaddress"
+                        value={entrega.nameaddress}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
                     <Form.Item
-                      label="Colonia o municipio"
-                      name="municipio"
+                      label="Colonia"
+                      name="colonia"
                       rules={[
                         {
-                          required: true,
-                          message: "¡Porfavor ingrese la colonia o municipio!",
+                          required: false,
+                          message: "¡Porfavor ingrese la colonia!",
                         },
                       ]}
                     >
-                      <Input placeholder="Ingrese el la colonia o municipio" />
+                      <Input
+                        placeholder="Ingrese el la colonia"
+                        onChange={handleChange}
+                        name="colonia"
+                        value={entrega.colonia}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
@@ -109,18 +160,22 @@ export default function PlanModal(props) {
                       rules={[
                         {
                           required: true,
-                          message:
-                            "¡Porfavor ingrese número exteriro o interior!",
+                          message: "¡Porfavor ingrese el número de su hogar!",
                         },
                       ]}
                     >
-                      <InputNumber />
+                      <Input
+                        name="numhouse"
+                        value={entrega.numhouse}
+                        onChange={handleChange}
+                        onKeyPress={onKeyPressEvent}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
                     <Form.Item
-                      label="Código postal"
-                      name="postalcode"
+                      label="Código Postal"
+                      name="codepostal"
                       rules={[
                         {
                           required: true,
@@ -128,21 +183,32 @@ export default function PlanModal(props) {
                         },
                       ]}
                     >
-                      <InputNumber />
+                      <Input
+                        placeholder="0000"
+                        name="codepostal"
+                        value={entrega.codepostal}
+                        onChange={handleChange}
+                        onKeyPress={onKeyPressEvent}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
                     <Form.Item
-                      label="Ciudad"
+                      label="Ciudad o municipio"
                       name="city"
                       rules={[
                         {
                           required: true,
-                          message: "¡Porfavor ingrese la ciudad!",
+                          message: "¡Porfavor ingrese la ciudad o municipio!",
                         },
                       ]}
                     >
-                      <Input placeholder="Ingrese el nombre de la ciudad" />
+                      <Input
+                        placeholder="Ingrese la ciudad o municipio"
+                        onChange={handleChange}
+                        name="city"
+                        value={entrega.city}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
@@ -156,7 +222,12 @@ export default function PlanModal(props) {
                         },
                       ]}
                     >
-                      <Input placeholder="Ingrese el estado" />
+                      <Input
+                        placeholder="Ingrese el estado"
+                        name="state"
+                        value={entrega.state}
+                        onChange={handleChange}
+                      />
                     </Form.Item>
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
@@ -166,7 +237,12 @@ export default function PlanModal(props) {
                           {" "}
                           Cancelar
                         </Button>
-                        <Button value="large" type="primary" htmlType="submit">
+                        <Button
+                          value="large"
+                          type="primary"
+                          htmlType="submit"
+                          onClick={onSubmitAdd}
+                        >
                           agregar
                         </Button>
                       </div>
@@ -178,6 +254,48 @@ export default function PlanModal(props) {
             <Sider theme="light">
               <Row gutter={[8, 16]} style={{ textAlign: "justify-all" }}>
                 {/* se insertan las tarjetas*/}
+                <Col span={20}>
+                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
+                    <Text strong style={{ paddingRight: "1rem" }}>
+                      DPTA-6231-AX21
+                    </Text>
+                    <Text>5 Km</Text>
+                  </div>
+                  <Text>Avenida las flores</Text>
+                </Col>
+                <Col span={4}>
+                  <Button type="text" icon={<EditOutlined />}></Button>
+                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
+                </Col>
+                <Divider style={{ margin: 0 }} />
+                <Col span={20}>
+                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
+                    <Text strong style={{ paddingRight: "1rem" }}>
+                      DPTA-6231-AX21
+                    </Text>
+                    <Text>5 Km</Text>
+                  </div>
+                  <Text>Avenida las flores</Text>
+                </Col>
+                <Col span={4}>
+                  <Button type="text" icon={<EditOutlined />}></Button>
+                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
+                </Col>
+                <Divider style={{ margin: 0 }} />
+                <Col span={20}>
+                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
+                    <Text strong style={{ paddingRight: "1rem" }}>
+                      DPTA-6231-AX21
+                    </Text>
+                    <Text>5 Km</Text>
+                  </div>
+                  <Text>Avenida las flores</Text>
+                </Col>
+                <Col span={4}>
+                  <Button type="text" icon={<EditOutlined />}></Button>
+                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
+                </Col>
+                <Divider style={{ margin: 0 }} />
                 <Col span={20}>
                   <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
                     <Text strong style={{ paddingRight: "1rem" }}>
