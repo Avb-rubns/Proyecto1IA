@@ -8,7 +8,6 @@ export default async function handler(req, res) {
       const { register } = req.query;
       if (register) {
         const { data } = req.body;
-        console.log({ recibiendoda: data });
         const service = new MongoDBService();
         const result = await service.register(data);
         service.close();
@@ -22,6 +21,11 @@ export default async function handler(req, res) {
       }
       break;
     case "PUT":
+      const { data } = req.body;
+      const service = new MongoDBService();
+      const result = await service.insertDelivery(data);
+      service.close();
+      res.status(200).send({ result: result });
       break;
     case "PATCH":
       break;

@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { deliverySchema } from "../schemas/deliveryScheme";
 import { userSchema } from "../schemas/userSchema";
 
 const { MONGO_URI } = process.env;
@@ -32,6 +33,7 @@ export class MongoDBService {
       console.log(result);
       return result;
     } catch (error) {
+      console.log(error);
       return result;
     }
   }
@@ -45,7 +47,22 @@ export class MongoDBService {
       console.log(result);
       return result;
     } catch (error) {
+      console.log(error);
       return result;
+    }
+  }
+  async insertDelivery(delivery) {
+    try {
+      let result = NaN;
+      const User = mongoose.model("User", userSchema);
+      const data = await User.findOne({ email: "prueba@mail.com" });
+      const Delivery = mongoose.model("Delivery", deliverySchema);
+      const newDelivery = new Delivery({ ...delivery });
+      data.route.push(newDelivery);
+      result = await data.save();
+      return result;
+    } catch (error) {
+      console.log(error);
     }
   }
 }

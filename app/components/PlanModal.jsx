@@ -1,6 +1,5 @@
 import ReactDOM from "react-dom";
 import { useState } from "react";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import styles from "../styles/planear.module.css";
 import {
   Modal,
@@ -13,10 +12,10 @@ import {
   Button,
   Divider,
 } from "antd";
+import { DeliveryList } from "./DeliveryList";
 
 const { Header, Sider, Content } = Layout;
-const colCounts = {};
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export default function PlanModal(props) {
   const [entrega, setForm] = useState({
@@ -27,8 +26,9 @@ export default function PlanModal(props) {
     numhouse: "",
     codepostal: "",
     city: "",
-    state: "",
+    country: "",
   });
+  const [listDeliveries, setDeliveries] = useState([]);
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm({ ...entrega, [name]: value });
@@ -41,14 +41,47 @@ export default function PlanModal(props) {
   };
 
   const onSubmitAdd = async () => {
-    const result = await fetch("http://localhost:3000/api/direction", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ entrega }),
-    }).then((res) => res.json());
-    console.log(result);
+    try {
+      const result = await fetch("http://localhost:3000/api/direction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ entrega }),
+      }).then((res) => res.json());
+      const info = await getDistance(result);
+      const insert = await insertDB({ ...entrega, ...info, ...result });
+      setDeliveries([...listDeliveries, { ...entrega, ...info, ...result }]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getDistance = async (data) => {
+    try {
+      const result = await fetch(
+        "http://localhost:3000/api/direction?lat=" +
+          data["lat"] +
+          "&lon=" +
+          data["lon"]
+      ).then((res) => res.json());
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const insertDB = async (data) => {
+    try {
+      const result = await fetch("http://localhost:3000/api/users", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data }),
+      }).then((res) => res.json());
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return ReactDOM.createPortal(
     <>
@@ -213,8 +246,8 @@ export default function PlanModal(props) {
                   </Col>
                   <Col xs={{ span: 24 }} md={{ span: 10 }}>
                     <Form.Item
-                      label="Estado"
-                      name="state"
+                      label="Pais"
+                      name="country"
                       rules={[
                         {
                           required: true,
@@ -223,8 +256,8 @@ export default function PlanModal(props) {
                       ]}
                     >
                       <Input
-                        placeholder="Ingrese el estado"
-                        name="state"
+                        placeholder="Ingrese el pais"
+                        name="country"
                         value={entrega.state}
                         onChange={handleChange}
                       />
@@ -254,62 +287,8 @@ export default function PlanModal(props) {
             <Sider theme="light">
               <Row gutter={[8, 16]} style={{ textAlign: "justify-all" }}>
                 {/* se insertan las tarjetas*/}
-                <Col span={20}>
-                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
-                    <Text strong style={{ paddingRight: "1rem" }}>
-                      DPTA-6231-AX21
-                    </Text>
-                    <Text>5 Km</Text>
-                  </div>
-                  <Text>Avenida las flores</Text>
-                </Col>
-                <Col span={4}>
-                  <Button type="text" icon={<EditOutlined />}></Button>
-                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
-                </Col>
                 <Divider style={{ margin: 0 }} />
-                <Col span={20}>
-                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
-                    <Text strong style={{ paddingRight: "1rem" }}>
-                      DPTA-6231-AX21
-                    </Text>
-                    <Text>5 Km</Text>
-                  </div>
-                  <Text>Avenida las flores</Text>
-                </Col>
-                <Col span={4}>
-                  <Button type="text" icon={<EditOutlined />}></Button>
-                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
-                </Col>
-                <Divider style={{ margin: 0 }} />
-                <Col span={20}>
-                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
-                    <Text strong style={{ paddingRight: "1rem" }}>
-                      DPTA-6231-AX21
-                    </Text>
-                    <Text>5 Km</Text>
-                  </div>
-                  <Text>Avenida las flores</Text>
-                </Col>
-                <Col span={4}>
-                  <Button type="text" icon={<EditOutlined />}></Button>
-                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
-                </Col>
-                <Divider style={{ margin: 0 }} />
-                <Col span={20}>
-                  <div style={{ paddingTop: "7px", paddingBottom: "7px" }}>
-                    <Text strong style={{ paddingRight: "1rem" }}>
-                      DPTA-6231-AX21
-                    </Text>
-                    <Text>5 Km</Text>
-                  </div>
-                  <Text>Avenida las flores</Text>
-                </Col>
-                <Col span={4}>
-                  <Button type="text" icon={<EditOutlined />}></Button>
-                  <Button type="text" danger icon={<DeleteOutlined />}></Button>
-                </Col>
-                <Divider style={{ margin: 0 }} />
+                <DeliveryList deliveries={listDeliveries} />
               </Row>
             </Sider>
           </Layout>
