@@ -13,11 +13,33 @@ export const userSchema = new Schema(
     numhouse: String,
     codepostal: String,
     city: String,
-    state: String,
-    route: [String],
+    country: String,
+    route: [
+      {
+        id: String,
+        dir: String,
+        username: String,
+        lastname: String,
+        state: String,
+        distance: String,
+        order: String,
+        duration: String,
+      },
+    ],
     packages: {
-      received: [String],
-      OTW: [String],
+      received: [
+        {
+          id: String,
+          state: String,
+          date: String,
+        },
+      ],
+      OTW: [
+        {
+          id: String,
+          state: String,
+        },
+      ],
     },
   },
   {

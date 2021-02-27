@@ -16,7 +16,7 @@ export default function RegisterModal(props) {
     numhouse: "",
     codepostal: "",
     city: "",
-    state: "",
+    country: "",
   });
 
   const handleChange = (event) => {
@@ -168,7 +168,6 @@ export default function RegisterModal(props) {
                 name="colonia"
                 rules={[
                   {
-                    required: true,
                     message: "¡Porfavor ingrese el nombre de la cólonia!",
                   },
                 ]}
@@ -187,7 +186,6 @@ export default function RegisterModal(props) {
                 name="numhouse"
                 rules={[
                   {
-                    required: true,
                     message: "¡Porfavor ingrese el número de su hogar!",
                   },
                 ]}
@@ -242,19 +240,19 @@ export default function RegisterModal(props) {
             </Col>
             <Col className="gutter-row" span={8}>
               <Form.Item
-                label="Estado"
-                name="state"
+                label="Pais"
+                name="country"
                 rules={[
                   {
                     required: true,
-                    message: "¡Porfavor ingrese el estado!",
+                    message: "¡Porfavor ingrese el pais!",
                   },
                 ]}
               >
                 <Input
-                  placeholder="Ingrese el nombre del estado"
-                  value={formR.state}
-                  name="state"
+                  placeholder="Ingrese el nombre del pais"
+                  value={formR.country}
+                  name="country"
                   onChange={handleChange}
                 />
               </Form.Item>

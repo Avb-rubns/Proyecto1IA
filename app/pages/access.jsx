@@ -45,18 +45,22 @@ export default function Login() {
   };
 
   const onSubmitRegisterModal = async (data) => {
-    const result = await fetch(
-      "http://localhost:3000/api/users?register=true",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data }),
-      }
-    ).then((res) => res.json());
-    handleCancel();
-    console.log({ ResultadoOn: result });
+    try {
+      const result = await fetch(
+        "http://localhost:3000/api/users?register=true",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data }),
+        }
+      ).then((res) => res.json());
+      handleCancel();
+      console.log({ ResultadoOn: result });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
