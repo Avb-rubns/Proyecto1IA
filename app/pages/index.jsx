@@ -1,6 +1,6 @@
 import Template from "../components/Template";
 import styles from "../styles/Home.module.css";
-import { Layout, Menu, Col, Row, Typography } from "antd";
+import { Layout, Menu, Col, Row } from "antd";
 import Nav from "../components/Nav";
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
 

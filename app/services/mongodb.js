@@ -1,4 +1,5 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+import { delLocale } from "next/dist/next-server/lib/router/router";
 import { deliverySchema } from "../schemas/deliveryScheme";
 import { userSchema } from "../schemas/userSchema";
 
@@ -60,6 +61,17 @@ export class MongoDBService {
       const newDelivery = new Delivery({ ...delivery });
       data.route.push(newDelivery);
       result = await data.save();
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async getDeliveries(id) {
+    try {
+      let result = NaN;
+      const User = mongoose.model("User", userSchema);
+      const data = await User.findOne({ email: "prueba@mail.com" });
+      result = data.route;
       return result;
     } catch (error) {
       console.log(error);

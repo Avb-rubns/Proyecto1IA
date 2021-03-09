@@ -120,13 +120,3 @@
     flex-direction: column;
   }
 }
-.info-avatar {
-  display: flex;
-  align-items: baseline;
-}
-.div-route {
-  display: flex;
-  justify-content: space-around;
-  text-align: center;
-  padding-top: 2rem;
-}

@@ -13,10 +13,10 @@ function handleMenuClick(e) {
 export default function HeadRoute(props) {
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item danger key="1" onClick={props.deleteAll}>
+      <Menu.Item danger key={1} onClick={props.deleteAll}>
         Cancelar Ruta
       </Menu.Item>
-      <Menu.Item danger key="2" onClick={props.delete}>
+      <Menu.Item danger key={2} onClick={props.delete}>
         Cancelar Entrega
       </Menu.Item>
     </Menu>
@@ -27,15 +27,13 @@ export default function HeadRoute(props) {
         ghost={false}
         title={"Ruta de entrega: " + dateTime}
         extra={[
-          <Button key="1" type="primary">
+          <Button type="primary" onClick={props.list}>
             Iniciar Entregas
           </Button>,
           <Dropdown overlay={menu} placement="bottomLeft">
             <Button danger>Cancelar</Button>
           </Dropdown>,
-          <Button onClick={props.showModal} key="2">
-            Planear Ruta
-          </Button>,
+          <Button onClick={props.showModal}>Planear Ruta</Button>,
         ]}
       ></PageHeader>
     </>

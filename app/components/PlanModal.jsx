@@ -50,7 +50,9 @@ export default function PlanModal(props) {
         body: JSON.stringify({ entrega }),
       }).then((res) => res.json());
       const info = await getDistance(result);
+      console.log(info);
       const insert = await insertDB({ ...entrega, ...info, ...result });
+      console.log(insert);
       setDeliveries([...listDeliveries, { ...entrega, ...info, ...result }]);
     } catch (error) {
       console.log(error);
@@ -64,6 +66,7 @@ export default function PlanModal(props) {
           "&lon=" +
           data["lon"]
       ).then((res) => res.json());
+      console.log(result);
       return result;
     } catch (error) {
       console.log(error);

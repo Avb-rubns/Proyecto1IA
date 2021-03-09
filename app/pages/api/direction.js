@@ -15,10 +15,6 @@ export default async function handler(req, res) {
 
     case "GET": {
       try {
-        const data = {
-          lat: "",
-          lon: "",
-        };
         const { lat, lon } = req.query;
         const map = new FMaps();
         const des = map.createCoord({ ...data, lat, lon });
@@ -28,6 +24,9 @@ export default async function handler(req, res) {
       } catch (error) {
         res.status(404).send("Error in get");
       }
+      break;
+    }
+    case "DELETE": {
       break;
     }
     default:
