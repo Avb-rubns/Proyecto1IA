@@ -138,7 +138,6 @@ export default function Login() {
           handleOk={onSubmitRegisterModal}
           handleCancel={handleCancel}
           confirmLoading={confirmLoading}
-          visible={visible}
           showModal={showModal}
         />
       )}
