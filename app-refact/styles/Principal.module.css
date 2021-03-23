@@ -6,3 +6,8 @@
 .container-menu {
   position: fixed;
 }
+.container-main {
+  border-right: 1;
+  padding-top: 1.22rem;
+  background: "white";
+}
