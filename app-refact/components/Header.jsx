@@ -1,10 +1,14 @@
-import { Typography, Avatar, Button } from "antd";
+import { Typography, Avatar, Button, Popover } from "antd";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { blue } from "@ant-design/colors";
 import styles from "../styles/Header.module.css";
 
 const { Title } = Typography;
-
+const content = (
+  <div className={styles["pop"]}>
+    <p>Cerrar Sesion</p>
+  </div>
+);
 export default function Header(props) {
   return (
     <>
@@ -17,13 +21,15 @@ export default function Header(props) {
           <div className={styles["container-session"]}>
             <Avatar size="small" icon={<UserOutlined />} />
             <p>Ricardo Perez Perez</p>
-            <Button
-              type="text"
-              style={{ color: "white" }}
-              icon={<LogoutOutlined />}
-              onClick={props.exit}
-              size="small"
-            />
+            <Popover content={content}>
+              <Button
+                type="text"
+                style={{ color: "white" }}
+                icon={<LogoutOutlined />}
+                onClick={props.exit}
+                size="small"
+              />
+            </Popover>
           </div>
         </div>
       </div>
