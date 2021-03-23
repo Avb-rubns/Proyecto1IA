@@ -1,5 +1,7 @@
 import ReactDOM from "react-dom";
 import styles from "../styles/PlanModal.module.css";
+import { DeliveryList } from "./DeliveryList";
+import { useState } from "react";
 import {
   Modal,
   Form,
@@ -10,13 +12,48 @@ import {
   Button,
   Divider,
 } from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  InfoCircleOutlined,
-} from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
+
+const { Title } = Typography;
 
 export default function PlanModal(props) {
+  const onKeyPressEvent = (event) => {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+    if (!new RegExp("[0-9]").test(keyValue)) event.preventDefault();
+    return;
+  };
+
+  const [listDeliveries, setDeliveries] = useState([]);
+  const [entrega, setForm] = useState({
+    username: "",
+    lastname: "",
+    address: "",
+    colonia: "",
+    numhouse: "",
+    postalcode: "",
+    city: "",
+    state: "",
+  });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...entrega, [name]: value });
+  };
+
+  const onSubmitAdd = async () => {
+    try {
+      const result = await fetch("http://localhost:3000/api/directioninfo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ entrega }),
+      }).then((res) => res.json());
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return ReactDOM.createPortal(
     <>
       <Modal
@@ -29,7 +66,7 @@ export default function PlanModal(props) {
       >
         <div>
           <Row>
-            <Col span={16}>
+            <Col span={17} style={{ marginRight: "1rem" }}>
               <Form
                 name="Entrega"
                 initialValues={{ remember: true }}
@@ -50,6 +87,8 @@ export default function PlanModal(props) {
                       <Input
                         placeholder="Ingrese nombre del cliente"
                         name="username"
+                        onChange={handleChange}
+                        value={entrega.username}
                       ></Input>
                     </Form.Item>
                   </Col>
@@ -67,7 +106,9 @@ export default function PlanModal(props) {
                     >
                       <Input
                         placeholder="Ingrese los apellidos"
-                        name="last"
+                        name="lastname"
+                        onChange={handleChange}
+                        value={entrega.lastname}
                       ></Input>
                     </Form.Item>
                   </Col>
@@ -85,6 +126,8 @@ export default function PlanModal(props) {
                       <Input
                         placeholder="Ingrese el nombre de la calle"
                         name="address"
+                        onChange={handleChange}
+                        value={entrega.address}
                       ></Input>
                     </Form.Item>
                   </Col>
@@ -102,6 +145,8 @@ export default function PlanModal(props) {
                       <Input
                         placeholder="Ingrese el nombre de la colonia o municipio"
                         name="colonia"
+                        onChange={handleChange}
+                        value={entrega.colonia}
                       ></Input>
                     </Form.Item>
                   </Col>
@@ -116,8 +161,11 @@ export default function PlanModal(props) {
                     >
                       <Input
                         placeholder="S/N"
-                        name="address"
-                        style={{ width: "48px" }}
+                        onKeyPress={onKeyPressEvent}
+                        name="numhouse"
+                        style={{ width: "64px" }}
+                        onChange={handleChange}
+                        value={entrega.numhouse}
                       ></Input>
                     </Form.Item>
                   </Col>
@@ -134,8 +182,11 @@ export default function PlanModal(props) {
                     >
                       <Input
                         placeholder="00000"
-                        name="postal"
+                        name="postalcode"
                         style={{ width: "64px" }}
+                        onChange={handleChange}
+                        onKeyPress={onKeyPressEvent}
+                        value={entrega.postalcode}
                       ></Input>
                     </Form.Item>
                   </Col>
@@ -143,7 +194,9 @@ export default function PlanModal(props) {
                     <Form.Item label="Ciudad" name="city">
                       <Input
                         placeholder="Ingrese el nombre de la ciudad"
-                        name="postal"
+                        name="city"
+                        onChange={handleChange}
+                        value={entrega.city}
                       ></Input>
                     </Form.Item>
                   </Col>
@@ -161,19 +214,34 @@ export default function PlanModal(props) {
                       <Input
                         placeholder="Ingrese el estado"
                         name="state"
+                        onChange={handleChange}
+                        value={entrega.state}
                       ></Input>
                     </Form.Item>
                   </Col>
                 </Row>
                 <div className={styles["container-btn-form"]}>
                   <Button danger>Cancelar</Button>
-                  <Button type="primary">Guardar</Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={onSubmitAdd}
+                  >
+                    Cargar
+                  </Button>
                 </div>
               </Form>
             </Col>
-            <Col span={8}>
-              <Row gutter={[8, 16]}>
-                <Col className="gutter-row" span={24}></Col>
+            {/*tarjetas*/}
+            <Col span={6} style={{ marginLeft: "1rem" }}>
+              <Row gutter={[8, 16]} style={{ textAlign: "center" }}>
+                <div className={styles["container-text"]}>
+                  <Title style={{ margin: 0, padding: 0 }} level={4}>
+                    Entregas
+                  </Title>
+                </div>
+                <Divider style={{ margin: 0, padding: 0 }} />
+                <DeliveryList deliveries={listDeliveries} />
               </Row>
             </Col>
           </Row>
