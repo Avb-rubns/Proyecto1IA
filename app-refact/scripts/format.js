@@ -34,10 +34,25 @@ export class formatText {
       data.username.substr(0, 2) +
       data.lastname.substr(0, 2) +
       "-" +
-      this.normalizeString(data.nameaddress).substr(0, 2) +
+      this.normalizeString(data.address).substr(0, 2) +
       data.numhouse +
       "-" +
       str;
     return id.toLocaleUpperCase();
+  }
+
+  createDelivery(data, id, User) {
+    let result = NaN;
+    result = {
+      id: id,
+      destination_addresses: data.destination_addresses[0],
+      username: User.username,
+      lastname: User.lastname,
+      state: "",
+      distance: data.rows[0].elements[0].distance.text,
+      order: "",
+      duration: data.rows[0].elements[0].duration.text,
+    };
+    return result;
   }
 }
