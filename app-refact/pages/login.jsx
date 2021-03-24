@@ -1,4 +1,5 @@
 import Template from "../components/Template";
+import { useState } from "react";
 import styles from "../styles/Login.module.css";
 import { Form, Typography, Input, Button, Divider, Tooltip } from "antd";
 import { blue } from "@ant-design/colors";
@@ -10,6 +11,29 @@ const { Title } = Typography;
 
 export default function Login() {
   const { visible, showModal, handleCancel } = useModal();
+  const [sesion, setForm] = useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...sesion, [name]: value });
+  };
+  const Sumit = async () => {
+    try {
+      console.log(sesion);
+      const result = await fetch("http://localhost:3000/api/user", {
+        method: "POST",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({ sesion }),
+      }).then((res) => res.json());
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Template title="Acceso">
       <div className={styles["container-main"]}>
@@ -37,7 +61,13 @@ export default function Login() {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese su correo" value={0} name="email" />
+                <Input
+                  placeholder="Ingrese su correo"
+                  value={0}
+                  name="email"
+                  onChange={handleChange}
+                  value={sesion.email}
+                />
               </Form.Item>
               <Form.Item
                 label="Contraseña"
@@ -53,6 +83,8 @@ export default function Login() {
                   placeholder="Ingrese su contraseña"
                   value={0}
                   name="password"
+                  onChange={handleChange}
+                  value={sesion.password}
                 />
               </Form.Item>
               <Form.Item className={styles["a"]}>
@@ -61,7 +93,7 @@ export default function Login() {
                 </Tooltip>
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" block>
+                <Button type="primary" htmlType="submit" block onClick={Sumit}>
                   Entrar
                 </Button>
               </Form.Item>
