@@ -2,8 +2,48 @@ import ReactDOM from "react-dom";
 import { Modal, Form, Row, Col, Input, Space, Button } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import styles from "../styles/Login.module.css";
+import { useState } from "react";
 
 export default function RegisterModal(props) {
+  const [formR, setForm] = useState({
+    username: "",
+    lastname: "",
+    cell: "",
+    email: "",
+    password: "",
+    address: "",
+    colonia: "",
+    numhouse: "",
+    postalcode: "",
+    city: "",
+    state: "",
+  });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm({ ...formR, [name]: value });
+  };
+  const onKeyPressEvent = (event) => {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+    if (!new RegExp("[0-9]").test(keyValue)) event.preventDefault();
+    return;
+  };
+
+  const onSumit = async () => {
+    try {
+      const result = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({ formR }),
+      }).then((res) => res.json());
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return ReactDOM.createPortal(
     <>
       <Modal
@@ -28,7 +68,12 @@ export default function RegisterModal(props) {
                   { required: true, message: "¡Por favor ingrese su nombre" },
                 ]}
               >
-                <Input placeholder="Ingrese su nombre" name="username"></Input>
+                <Input
+                  placeholder="Ingrese su nombre"
+                  name="username"
+                  value={formR.username}
+                  onChange={handleChange}
+                ></Input>
               </Form.Item>
             </Col>
 
@@ -46,6 +91,8 @@ export default function RegisterModal(props) {
                 <Input
                   placeholder="Ingrese sus apellidos"
                   name="lastname"
+                  value={formR.lastname}
+                  onChange={handleChange}
                 ></Input>
               </Form.Item>
             </Col>
@@ -60,7 +107,13 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese su telefono" name="cell"></Input>
+                <Input
+                  placeholder="Ingrese su telefono"
+                  name="cell"
+                  value={formR.cell}
+                  onKeyPress={onKeyPressEvent}
+                  onChange={handleChange}
+                ></Input>
               </Form.Item>
             </Col>
             <Col className="gutter-row" span={8}>
@@ -77,6 +130,8 @@ export default function RegisterModal(props) {
                 <Input
                   placeholder="Ingrese su correo electronico"
                   name="email"
+                  value={formR.email}
+                  onChange={handleChange}
                 ></Input>
               </Form.Item>
             </Col>
@@ -94,6 +149,8 @@ export default function RegisterModal(props) {
                 <Input.Password
                   placeholder="Ingrese una contraseña"
                   name="password"
+                  value={formR.password}
+                  onChange={handleChange}
                 ></Input.Password>
               </Form.Item>
             </Col>
@@ -129,6 +186,8 @@ export default function RegisterModal(props) {
                 <Input
                   placeholder="Ingrese el nombre de la calle"
                   name="address"
+                  value={formR.address}
+                  onChange={handleChange}
                 ></Input>
               </Form.Item>
             </Col>
@@ -146,6 +205,8 @@ export default function RegisterModal(props) {
                 <Input
                   placeholder="Ingrese el nombre de la colonia o municipio"
                   name="colonia"
+                  value={formR.colonia}
+                  onChange={handleChange}
                 ></Input>
               </Form.Item>
             </Col>
@@ -160,8 +221,11 @@ export default function RegisterModal(props) {
               >
                 <Input
                   placeholder="S/N"
-                  name="address"
-                  style={{ width: "48px" }}
+                  name="numhouse"
+                  style={{ width: "64px" }}
+                  value={formR.numhouse}
+                  onChange={handleChange}
+                  onKeyPress={onKeyPressEvent}
                 ></Input>
               </Form.Item>
             </Col>
@@ -178,8 +242,11 @@ export default function RegisterModal(props) {
               >
                 <Input
                   placeholder="00000"
-                  name="postal"
+                  name="postalcode"
                   style={{ width: "64px" }}
+                  value={formR.postalcode}
+                  onChange={handleChange}
+                  onKeyPress={onKeyPressEvent}
                 ></Input>
               </Form.Item>
             </Col>
@@ -187,7 +254,9 @@ export default function RegisterModal(props) {
               <Form.Item label="Ciudad" name="city">
                 <Input
                   placeholder="Ingrese el nombre de la ciudad"
-                  name="postal"
+                  name="city"
+                  value={formR.city}
+                  onChange={handleChange}
                 ></Input>
               </Form.Item>
             </Col>
@@ -202,13 +271,18 @@ export default function RegisterModal(props) {
                   },
                 ]}
               >
-                <Input placeholder="Ingrese el estado" name="state"></Input>
+                <Input
+                  placeholder="Ingrese el estado"
+                  name="state"
+                  value={formR.state}
+                  onChange={handleChange}
+                ></Input>
               </Form.Item>
             </Col>
           </Row>
           <div className={styles["container-btn-register"]}>
             <Button onClick={props.handleCancel}>Cancelar</Button>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={onSumit}>
               Registrarse
             </Button>
           </div>

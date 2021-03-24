@@ -10,6 +10,7 @@ export default function RegisterModal(props) {
     name: "",
     lastname: "",
     cell: "",
+    email: "",
     password: "",
     nameaddress: "",
     colonia: "",
