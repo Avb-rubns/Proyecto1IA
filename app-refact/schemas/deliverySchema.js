@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const deliverySchema = new Schema([
   {
-    id: String,
+    idDelivery: String,
+    idUser: String,
     destination_addresses: String,
     username: String,
     lastname: String,
