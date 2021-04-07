@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
+    idUser: String,
     username: String,
     lastname: String,
     cell: String,
@@ -16,7 +17,8 @@ const userSchema = new Schema(
     state: String,
     route: [
       {
-        id: String,
+        idDelivery: String,
+        idUser: String,
         destination_addresses: String,
         username: String,
         lastname: String,
@@ -29,14 +31,14 @@ const userSchema = new Schema(
     packages: {
       received: [
         {
-          id: String,
+          idDelivery: String,
           state: String,
           date: String,
         },
       ],
       OTW: [
         {
-          id: String,
+          idDelivery: String,
           state: String,
         },
       ],

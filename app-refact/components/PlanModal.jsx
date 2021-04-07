@@ -34,6 +34,7 @@ export default function PlanModal(props) {
     postalcode: "",
     city: "",
     state: "",
+    idUser: "",
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -49,11 +50,13 @@ export default function PlanModal(props) {
         },
         body: JSON.stringify({ entrega }),
       }).then((res) => res.json());
-      console.log(result);
+      setDeliveries([...listDeliveries, { ...result }]);
+      console.log(listDeliveries);
     } catch (error) {
       console.log(error);
     }
   };
+
   return ReactDOM.createPortal(
     <>
       <Modal
@@ -109,6 +112,24 @@ export default function PlanModal(props) {
                         name="lastname"
                         onChange={handleChange}
                         value={entrega.lastname}
+                      ></Input>
+                    </Form.Item>
+                  </Col>
+                  <Col className="gutter-row" span={12}>
+                    <Form.Item
+                      label="ID Usuario"
+                      name="idUser"
+                      tooltip={{
+                        title:
+                          "Si el cliente no esta registrado deje vacio este campo",
+                        icon: <InfoCircleOutlined />,
+                      }}
+                    >
+                      <Input
+                        placeholder="Ingrese ID del Usuario"
+                        name="idUser"
+                        onChange={handleChange}
+                        value={entrega.idUser}
                       ></Input>
                     </Form.Item>
                   </Col>
