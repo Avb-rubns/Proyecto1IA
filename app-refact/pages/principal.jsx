@@ -66,9 +66,10 @@ export default function Principal(props) {
           {/* Main */}
           <Col span={20}>
             <div className={styles["container-main"]}>
-              {showTable && <TablePackages />}
-              {showTable && <PlanRoute />}
-              <RouteGeneral showModal={showModal} />
+              {/*showTable && <TablePackages />*/}
+              {/*<TablePackages />*/}
+              <PlanRoute showModal={showModal} />
+              {/*<RouteGeneral showModal={showModal} />*/}
             </div>
           </Col>
         </Row>

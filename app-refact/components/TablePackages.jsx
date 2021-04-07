@@ -13,24 +13,6 @@ const dataSource = [
     state: "En camino",
     date: "",
   },
-  {
-    key: "3",
-    package: "DPTA-6231-AX22",
-    state: "En camino",
-    date: "",
-  },
-  {
-    key: "4",
-    package: "DPTA-6231-AX22",
-    state: "Recibo",
-    date: "25/02/21",
-  },
-  {
-    key: "5",
-    package: "DPTA-6231-AX22",
-    state: "En camino",
-    date: "",
-  },
 ];
 const columns = [
   {
