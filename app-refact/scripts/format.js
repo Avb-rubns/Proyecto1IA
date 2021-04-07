@@ -1,50 +1,93 @@
 export class formatText {
+  /**
+   *
+   * @param {*} data : es la direccion del formulario de envio
+   * @returns devuleve la direcion en formato para utilizar en maps
+   */
   createDirection(data) {
     let dir =
       "&destinations=" +
-      this.normalizeString(data.address).toLocaleLowerCase() +
+      this.normalizeString(data.address) +
       "+" +
       data.numhouse +
       "," +
-      this.normalizeString(data.colonia).toLocaleLowerCase() +
+      this.normalizeString(data.colonia) +
       "," +
       data.postalcode +
       "," +
-      this.normalizeString(data.city).toLocaleLowerCase() +
+      this.normalizeString(data.city) +
       "," +
-      this.normalizeString(data.state).toLocaleLowerCase();
+      this.normalizeString(data.state);
     return dir;
   }
-
+  /**
+   *  remplaza la los espacios por un +, quita los signos de acentuacion
+   * @param {*} string recibe la direccion del envio
+   * @returns devuelve al direcion concatenada por +
+   */
   normalizeString(string) {
-    const res = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const auxres = res.trim();
-    const ausres = auxres.replace(/\s/g, "+");
-    return ausres;
+    let res = NaN;
+    res = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    res = res.trim();
+    res = res.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()”“"…]/g, "");
+    res = res.replace(/\s/g, "+");
+    return res.toLocaleLowerCase();
   }
+  /**
+   *
+   * @param {*} data : es la informacion del formulario de entrega
+   * @returns devuelve el id de la entrega
+   */
   createID(data) {
-    let chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let str = "";
-    for (let i = 0; i < 4; i++) {
-      str += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
+    let str = this.randStr();
     let id =
       data.username.substr(0, 2) +
       data.lastname.substr(0, 2) +
       "-" +
-      this.normalizeString(data.address).substr(0, 2) +
+      this.initaddress(data.address) +
       data.numhouse +
       "-" +
       str;
     return id.toLocaleUpperCase();
   }
 
+  /**
+   *
+   * @param {*} data es la informacion del formulario de registro
+   * @returns  el idi del usuario
+   */
+
+  createIDUser(data) {
+    let str = this.randStr();
+    let num = "";
+    if (data.numhouse != NaN) {
+      num = data.numhouse;
+    } else {
+      num = this.numrand;
+    }
+    console.log(this.initaddress(data.address));
+    let id =
+      data.username.substr(0, 2) +
+      data.lastname.substr(0, 2) +
+      this.initaddress(data.address) +
+      num +
+      str;
+    return { idUser: id.toLocaleUpperCase() };
+  }
+
+  /**
+   *
+   * @param {*} data : informacion de la entrega por maps
+   * @param {*} id id del delivery
+   * @param {*} User informacion del cliente
+   * @param {*} iduser id del cliente
+   * @returns
+   */
   createDelivery(data, id, User) {
     let result = NaN;
     result = {
-      id: id,
+      idDelivery: id,
+      idUser: User.idUser,
       destination_addresses: data.destination_addresses[0],
       username: User.username,
       lastname: User.lastname,
@@ -54,5 +97,79 @@ export class formatText {
       duration: data.rows[0].elements[0].duration.text,
     };
     return result;
+  }
+
+  /**
+   *
+   * @returns Devuelve un randon de longitud 4
+   */
+  numrand() {
+    let chars = "0123456789";
+    let str = "";
+    for (let i = 0; i < 4; i++) {
+      str += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return str;
+  }
+
+  /**
+   *
+   * @returns devuelve un random de logitud 4 son numeros y letras
+   */
+  randStr() {
+    let chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let str = "";
+    for (let i = 0; i < 4; i++) {
+      str += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return str;
+  }
+
+  initaddress(string) {
+    let ad = NaN;
+    let res = "";
+    ad = this.initadd(string);
+    ad = ad.replace(/av|y|de|calz|blvrd|calle|san|don/g, "");
+    ad = ad.trim();
+    console.log(ad);
+    let aux = ad.split(" ");
+    res = this.str2(aux);
+    return res;
+  }
+
+  /**
+   *
+   * @param {*} string : string a procesar
+   * @returns : un string cson signos de puntuacion o acentos
+   */
+  initadd(string) {
+    let res = NaN;
+    res = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    res = res.trim();
+    res = res.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()”“"…]/g, "");
+    return res.toLocaleLowerCase();
+  }
+  /**
+   *
+   * @param {*} aux  arrglo de str
+   * @returns devuelve un str de logitud 2
+   */
+  str2(aux) {
+    let res = "";
+    if (aux.length >= 2) {
+      for (let i = 0; i < aux.length; i++) {
+        if (aux[i].length > 2) {
+          res += aux[i].substr(0, 1);
+        }
+      }
+    } else {
+      for (let i = 0; i < aux.length; i++) {
+        if (aux[i].length > 2) {
+          res += aux[i].substr(0, 2);
+        }
+      }
+    }
+    return res.substr(0, 2);
   }
 }
