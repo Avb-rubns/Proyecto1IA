@@ -3,8 +3,15 @@ import { Modal, Form, Row, Col, Input, Space, Button } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import styles from "../styles/Login.module.css";
 import { useState } from "react";
-
+import { AlertRegister } from "../components/AlertRegister";
 export default function RegisterModal(props) {
+  let [visible, setVisible] = useState();
+  const handleClose = () => {
+    setVisible(false);
+  };
+  let description,
+    type,
+    message = "";
   const [formR, setForm] = useState({
     username: "",
     lastname: "",
@@ -39,6 +46,10 @@ export default function RegisterModal(props) {
         body: JSON.stringify({ formR }),
       }).then((res) => res.json());
       console.log(result);
+      setVisible(true);
+      message = result.message;
+      type = result.type;
+      description = result.description;
     } catch (error) {
       console.log(error);
     }
@@ -54,6 +65,14 @@ export default function RegisterModal(props) {
         onCancel={props.handleCancel}
         width={"100vh"}
       >
+        {visible && (
+          <AlertRegister
+            message={message}
+            description={description}
+            type={type}
+            afterClose={handleClose}
+          />
+        )}
         <Form
           name="register"
           initialValues={{ remember: true }}
