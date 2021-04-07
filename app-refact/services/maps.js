@@ -8,7 +8,6 @@ export class MapsService {
       const result = await fetch(
         MAPS_URI + POINT_ORIGIN + data + API_KEY_DISTANCE
       ).then((res) => res.json());
-      console.log(result);
       return result;
     } catch (error) {
       console.log(error);
