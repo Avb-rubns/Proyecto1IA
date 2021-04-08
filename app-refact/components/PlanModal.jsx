@@ -51,7 +51,6 @@ export default function PlanModal(props) {
         body: JSON.stringify({ entrega }),
       }).then((res) => res.json());
       setDeliveries([...listDeliveries, { ...result }]);
-      console.log(listDeliveries);
     } catch (error) {
       console.log(error);
     }

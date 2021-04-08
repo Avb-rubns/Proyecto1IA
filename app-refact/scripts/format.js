@@ -132,7 +132,6 @@ export class formatText {
     ad = this.initadd(string);
     ad = ad.replace(/av|y|de|calz|blvrd|calle|san|don/g, "");
     ad = ad.trim();
-    console.log(ad);
     let aux = ad.split(" ");
     res = this.str2(aux);
     return res;
