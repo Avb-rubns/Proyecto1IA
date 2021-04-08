@@ -27,7 +27,8 @@ export default async function handler(req, res) {
       break;
 
     case "DELETE":
-      const r = await serviceMongo.deleteDelivery(req.query);
+      const { ids } = req.body;
+      const r = await serviceMongo.deleteDelivery(ids, "");
       serviceMongo.close();
       res.status(200).send({ r });
       break;
