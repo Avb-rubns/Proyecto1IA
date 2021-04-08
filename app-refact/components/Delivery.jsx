@@ -4,14 +4,16 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
-const deleteDelivery = async (id) => {
+const deleteDelivery = async (ids) => {
   try {
-    const result = await fetch(
-      "http://localhost:3000/api/directioninfo/?id=" + id,
-      {
-        method: "DELETE",
-      }
-    ).then((res) => res.json());
+    console.log(ids);
+    const result = await fetch("http://localhost:3000/api/directioninfo", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids }),
+    }).then((res) => res.json());
     console.log(result);
   } catch (error) {
     console.log(error);
@@ -25,6 +27,7 @@ export function Delivery(props) {
           <div style={{ marginLeft: "1rem" }}>
             <div>
               <Text strong>{props.idDelivery}</Text>
+              <p hidden>{props.idUser}</p>
               <Text style={{ marginLeft: "1rem" }}>{props.distance}</Text>
             </div>
             <Text>{props.destination_addresses}</Text>
@@ -33,7 +36,12 @@ export function Delivery(props) {
             <Button type="text" icon={<EditOutlined />} />
             <Button
               type="text"
-              onClick={() => deleteDelivery(props.idDelivery)}
+              onClick={() =>
+                deleteDelivery({
+                  idDelivery: props.idDelivery,
+                  idUser: props.idUser,
+                })
+              }
               danger
               icon={<DeleteOutlined />}
             />
