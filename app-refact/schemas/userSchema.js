@@ -28,21 +28,19 @@ const userSchema = new Schema(
         duration: String,
       },
     ],
-    packages: {
-      received: [
-        {
-          idDelivery: String,
-          state: String,
-          date: String,
-        },
-      ],
-      OTW: [
-        {
-          idDelivery: String,
-          state: String,
-        },
-      ],
-    },
+    received: [
+      {
+        idDelivery: String,
+        state: String,
+        date: String,
+      },
+    ],
+    otw: [
+      {
+        idDelivery: String,
+        state: String,
+      },
+    ],
   },
   {
     timestamps: true,
