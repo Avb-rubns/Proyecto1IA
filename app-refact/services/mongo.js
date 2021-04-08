@@ -31,7 +31,6 @@ export class MongoDBService {
         email: form.email,
       });
       let result = null;
-      console.log(be);
       if (be == null) {
         await userNew.save();
         result = {
@@ -71,7 +70,7 @@ export class MongoDBService {
       const newDelivery = new Delivery({ ...delivery });
       if (register) {
         const dataC = await User.findOne({ idUser: delivery.idUser });
-        dataC.packages.OTW.push(newDelivery);
+        dataC.otw.push(newDelivery);
         await dataC.save();
       } else {
         const d = await ListDelyveries.findOne({ id: "general" });
@@ -85,17 +84,33 @@ export class MongoDBService {
       console.log(error);
     }
   }
-
-  async deleteDelivery(idDelivery, user) {
+  /* nota: modificar para qeu sea el id del repartidor y no su correo */
+  async deleteDelivery(ids, user) {
     try {
+      console.log(ids);
       let result = NaN;
-      const dataOld = await User.findOne({ idUser: "RIPEJP7CJP" });
+      const dataOld = await User.findOne({ email: "prueba@mail.com" });
       console.log(dataOld);
-      await User.updateOne(
-        { idUser: "RIPEJP7CJP" },
-        { $pull: { route: { idDelivery: idDelivery.id } } }
-      );
-      const dataU = await User.findOne({ idUser: "RIPEJP7CJP" });
+      if (ids.idUser != "") {
+        await User.updateOne(
+          { email: "prueba@mail.com" },
+          { $pull: { route: { idDelivery: ids.idDelivery } } }
+        );
+        await User.updateOne(
+          { idUser: ids.idUser },
+          { $pull: { otw: { idDelivery: ids.idDelivery } } }
+        );
+      } else {
+        await User.updateOne(
+          { email: "prueba@mail.com" },
+          { $pull: { route: { idDelivery: ids.idDelivery } } }
+        );
+        await ListDelyveries.updateOne(
+          { id: "general" },
+          { $pull: { deliveries: { idDelivery: ids.idDelivery } } }
+        );
+      }
+      const dataU = await User.findOne({ email: "prueba@mail.com" });
       if (dataOld.route === dataU.route) {
         result = "Ocurrio un error al eliminar la entrega";
       } else {
