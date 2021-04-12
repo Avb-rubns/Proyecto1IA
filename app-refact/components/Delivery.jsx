@@ -7,7 +7,7 @@ const { Text } = Typography;
 const deleteDelivery = async (ids) => {
   try {
     console.log(ids);
-    const result = await fetch("http://localhost:3000/api/directioninfo", {
+    const result = await fetch("http://localhost:3000/api/planDeliveries", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function useModal() {
-  const [visible, setVisible] = useState(false);
+  const [visibleModal, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showModal = () => {
@@ -24,7 +24,7 @@ export default function useModal() {
     showModal,
     handleOk,
     handleCancel,
-    visible,
+    visibleModal,
     confirmLoading,
   };
 }

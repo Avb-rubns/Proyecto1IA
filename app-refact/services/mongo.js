@@ -56,13 +56,15 @@ export class MongoDBService {
       let be = null;
       be = await User.findOne({
         email: form.email,
-        password: form.password,
       });
       return be;
     } catch (error) {
       console.log(error);
+      return { msj: "Error L001" };
     }
   }
+
+  /* nota: modificar para qeu sea el id del repartidor y no su correo */
   async insertDelivery(delivery, user, register) {
     try {
       let result = NaN;
@@ -120,6 +122,19 @@ export class MongoDBService {
       return result;
     } catch (error) {
       console.log(error);
+      return (result = { msj: "Error en eliminar" });
+    }
+  }
+
+  async getRoute(idUser) {
+    try {
+      let result = NaN;
+      const data = await User.findOne({ idUser: idUser });
+      result = data.route;
+      return result;
+    } catch (error) {
+      console.log(error);
+      return { msj: "Error al obtener Route" };
     }
   }
 }

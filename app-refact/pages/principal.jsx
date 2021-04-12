@@ -3,28 +3,29 @@ import Header from "../components/Header";
 import TablePackages from "../components/TablePackages";
 import PlanRoute from "../components/PlanRoute";
 import RouteGeneral from "../components/RouteGeneral";
+import { useState } from "react";
 import PlanModal from "../components/PlanModal";
 import useModal from "../hooks/useModal";
 import styles from "../styles/Principal.module.css";
 import { Row, Col, Menu } from "antd";
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
 
-export default function Principal(props) {
-  const { visible, showModal, handleCancel } = useModal();
-  let showTable = false;
+export default function Principal(data) {
+  const { visibleModal, showModal, handleCancel } = useModal();
+  const [visiblePlan, setVisibleP] = useState();
+  const [visibleRoute, setVisibleR] = useState();
+  const [visibleTable, setVisibleT] = useState();
+
   const handleClick = (e) => {
-    showTable = false;
     console.log("click ", e.key);
     switch (e.key) {
       case "1":
-        showTable = false;
         console.log("Logistica");
-        console.log(showTable);
+        setVisibleT(false);
         break;
       case "2":
         console.log("Paquetes");
-        showTable = true;
-        console.log(showTable);
+        setVisibleT(true);
         break;
 
       default:
@@ -34,7 +35,7 @@ export default function Principal(props) {
 
   return (
     <Template title="Principal">
-      <Header name={props.name} exit={props.exit} />
+      <Header name={data.name} exit={data.exit} />
       <div className={styles["container"]}>
         <Row
           style={{
@@ -66,17 +67,17 @@ export default function Principal(props) {
           {/* Main */}
           <Col span={20}>
             <div className={styles["container-main"]}>
-              {/*showTable && <TablePackages />*/}
-              {/*<TablePackages />*/}
-              <PlanRoute showModal={showModal} />
-              {/*<RouteGeneral showModal={showModal} />*/}
+              {visibleTable && <TablePackages />}
+              {/*<PlanRoute showModal={showModal} />*/}
+              <RouteGeneral showModal={showModal} />
+              {/* visibleRoute &&  <RouteGeneral showModal={showModal} />*/}
             </div>
           </Col>
         </Row>
       </div>
-      {visible && (
+      {visibleModal && (
         <PlanModal
-          visible={visible}
+          visible={visibleModal}
           showModal={showModal}
           handleCancel={handleCancel}
           title={"Crear Entregas"}

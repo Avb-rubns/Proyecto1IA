@@ -9,8 +9,8 @@ import useModal from "../hooks/useModal";
 
 const { Title } = Typography;
 
-export default function Login() {
-  const { visible, showModal, handleCancel } = useModal();
+export default function Login(providers) {
+  const { visibleModal, showModal, handleCancel } = useModal();
   const [sesion, setForm] = useState({
     email: "",
     password: "",
@@ -21,7 +21,6 @@ export default function Login() {
   };
   const Sumit = async () => {
     try {
-      console.log(sesion);
       const result = await fetch("http://localhost:3000/api/user", {
         method: "POST",
         headers: {
@@ -29,7 +28,6 @@ export default function Login() {
         },
         body: JSON.stringify({ sesion }),
       }).then((res) => res.json());
-      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -107,9 +105,9 @@ export default function Login() {
           </div>
         </div>
       </div>
-      {visible && (
+      {visibleModal && (
         <RegisterModal
-          visible={visible}
+          visible={visibleModal}
           showModal={showModal}
           handleCancel={handleCancel}
           title={"Registrate"}

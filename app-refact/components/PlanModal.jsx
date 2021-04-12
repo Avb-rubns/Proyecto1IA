@@ -43,7 +43,7 @@ export default function PlanModal(props) {
 
   const onSubmitAdd = async () => {
     try {
-      const result = await fetch("http://localhost:3000/api/directioninfo", {
+      const result = await fetch("http://localhost:3000/api/planDeliveries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export default function PlanModal(props) {
     <>
       <Modal
         title={props.title}
-        visible={props.visible}
+        visible={props.visibleModal}
         footer={null}
         destroyOnClose={true}
         onCancel={props.handleCancel}
