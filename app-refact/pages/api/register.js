@@ -1,5 +1,7 @@
 import { MongoDBService } from "../../services/mongo";
 import { formatText } from "../../scripts/format";
+let bcrypt = require("bcryptjs");
+
 export default async function handler(req, res) {
   switch (req.method) {
     case "POST":
@@ -7,7 +9,9 @@ export default async function handler(req, res) {
       const { formR } = req.body;
       const textF = new formatText();
       const idUser = textF.createIDUser(formR);
-      console.log(idUser);
+      let salt = bcrypt.genSaltSync(10);
+      let hash = bcrypt.hashSync(formR.password, salt);
+      formR.password = hash;
       const result = await service.register(formR, idUser);
       service.close();
       res.status(200).send({ result });
