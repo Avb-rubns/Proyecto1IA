@@ -6,7 +6,6 @@ export class formatText {
    */
   createDirection(data) {
     let dir =
-      "&destinations=" +
       this.normalizeString(data.address) +
       "+" +
       data.numhouse +
@@ -170,5 +169,32 @@ export class formatText {
       }
     }
     return res.substr(0, 2);
+  }
+
+  createTable(origen, route) {
+    let graph = new Map();
+    let position = 1;
+    for (let index = 0; index < route.length; index++) {
+      graph.set(
+        origen + "-" + route[index].destination_addresses,
+        route[index].distance
+      );
+    }
+    for (let index = 0; index < route.length; index++) {
+      if (index < route.length) {
+        for (let i = position; i < route.length; i++) {
+          graph.set(
+            route[index].destination_addresses +
+              "-" +
+              route[i].destination_addresses,
+            0
+          );
+        }
+        position += 1;
+      } else {
+        break;
+      }
+    }
+    return graph;
   }
 }
