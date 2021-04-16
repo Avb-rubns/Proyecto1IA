@@ -54,15 +54,9 @@ export default async function handler(req, res) {
           map.set(clave, distance);
         }
 
-        map.forEach(function (valor, clave) {
-          console.log(clave + ":" + valor);
-        });
-
         //const graph = new GraphD();
         //const minimumSpanningTree = prim(graph.createG());
         //console.log(minimumSpanningTree.toString());
-        //const info = await serviceMaps.getInfo(originUser, des);
-        //console.log(des);
         /*console.log(route);*/
         res.status(200).send({ route });
         service.close();
