@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 export default function useModal() {
-  const [visibleModal, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showModal = () => {
+    console.log("#");
     setVisible(true);
   };
 
@@ -24,7 +25,7 @@ export default function useModal() {
     showModal,
     handleOk,
     handleCancel,
-    visibleModal,
+    visible,
     confirmLoading,
   };
 }

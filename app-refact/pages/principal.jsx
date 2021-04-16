@@ -11,7 +11,7 @@ import { Row, Col, Menu } from "antd";
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
 
 export default function Principal(data) {
-  const { visibleModal, showModal, handleCancel } = useModal();
+  const { visible, showModal, handleCancel } = useModal();
   const [visiblePlan, setVisibleP] = useState();
   const [visibleRoute, setVisibleR] = useState();
   const [visibleTable, setVisibleT] = useState();
@@ -75,9 +75,9 @@ export default function Principal(data) {
           </Col>
         </Row>
       </div>
-      {visibleModal && (
+      {visible && (
         <PlanModal
-          visible={visibleModal}
+          visible={visible}
           showModal={showModal}
           handleCancel={handleCancel}
           title={"Crear Entregas"}

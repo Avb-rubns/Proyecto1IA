@@ -60,7 +60,7 @@ export default function PlanModal(props) {
     <>
       <Modal
         title={props.title}
-        visible={props.visibleModal}
+        visible={props.visible}
         footer={null}
         destroyOnClose={true}
         onCancel={props.handleCancel}

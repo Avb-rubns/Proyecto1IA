@@ -10,7 +10,7 @@ import useModal from "../hooks/useModal";
 const { Title } = Typography;
 
 export default function Login(providers) {
-  const { visibleModal, showModal, handleCancel } = useModal();
+  const { visible, showModal, handleCancel } = useModal();
   const [sesion, setForm] = useState({
     email: "",
     password: "",
@@ -105,9 +105,9 @@ export default function Login(providers) {
           </div>
         </div>
       </div>
-      {visibleModal && (
+      {visible && (
         <RegisterModal
-          visible={visibleModal}
+          visible={visible}
           showModal={showModal}
           handleCancel={handleCancel}
           title={"Registrate"}
