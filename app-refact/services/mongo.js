@@ -137,4 +137,22 @@ export class MongoDBService {
       return { msj: "Error al obtener Route" };
     }
   }
+  async getDicUser(idUser) {
+    try {
+      let result = NaN;
+      const data = await User.findOne({ idUser: idUser });
+      result = {
+        address: data.address,
+        colonia: data.colonia,
+        numhouse: data.numhouse,
+        postalcode: data.postalcode,
+        city: data.city,
+        state: data.state,
+      };
+      return result;
+    } catch (error) {
+      console.log(error);
+      return { msj: "Error al obtener Route" };
+    }
+  }
 }
