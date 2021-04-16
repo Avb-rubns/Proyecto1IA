@@ -1,36 +1,58 @@
 import { formatText } from "../../scripts/format";
 import { MapsService } from "../../services/maps";
 import { MongoDBService } from "../../services/mongo";
-export default async function handler(req, res) {
-  const serviceMaps = new MapsService();
-  const textF = new formatText();
-  const serviceMongo = new MongoDBService();
 
+export default async function handler(req, res) {
+  const textF = new formatText();
+  const serviceMaps = new MapsService();
+  const serviceMongo = new MongoDBService();
   switch (req.method) {
     case "POST":
-      const { entrega } = req.body;
-      const des = textF.createDirection(entrega);
-      const id = textF.createID(entrega);
+      try {
+        const { entrega } = req.body;
+        const des = textF.createDirection(entrega);
+        const id = textF.createID(entrega);
+        /* Pasar la direccion del usuario */
+        let POINT_ORIGIN =
+          "Av+Don+Juande+Palafox+y+Mendoza,Centro,72000,Puebla,Pue";
 
-      const info = await serviceMaps.getInfo(des);
+        const info = await serviceMaps.getInfo(POINT_ORIGIN, des);
 
-      const delivery = textF.createDelivery(info, id, entrega);
-      if (entrega.idUser != "") {
-        const register = true;
-        await serviceMongo.insertDelivery(delivery, "", register);
-      } else {
-        const register = false;
-        await serviceMongo.insertDelivery(delivery, "", register);
+        const delivery = textF.createDelivery(info, id, entrega);
+        if (entrega.idUser != "") {
+          const register = true;
+          await serviceMongo.insertDelivery(delivery, "", register);
+        } else {
+          const register = false;
+          await serviceMongo.insertDelivery(delivery, "", register);
+        }
+        res.status(200).send(delivery);
+        serviceMongo.close();
+      } catch (error) {
+        res.status(404).send({ MSJ: "ERRO-PLD-P" });
+        serviceMongo.close();
       }
-      serviceMongo.close();
-      res.status(200).send(delivery);
+
       break;
 
     case "DELETE":
-      const { ids } = req.body;
-      const r = await serviceMongo.deleteDelivery(ids, "");
-      serviceMongo.close();
-      res.status(200).send({ r });
+      try {
+        const { ids } = req.body;
+        const r = await serviceMongo.deleteDelivery(ids, "");
+        serviceMongo.close();
+        res.status(200).send({ r });
+      } catch (error) {
+        res.status(404).send({ msj: "ERROR-PLD-D" });
+      }
+
+      break;
+    case "GET":
+      try {
+        res.status(200).send({});
+      } catch (error) {
+        console.log("ERRO-PL-02");
+        res.status(404).send({ MSJ: "ERRO-PL-G" });
+      }
       break;
 
     default:
