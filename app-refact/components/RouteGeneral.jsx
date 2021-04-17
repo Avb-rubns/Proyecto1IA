@@ -10,7 +10,8 @@ let date =
 let dateTime = date;
 let numDeliveries = NaN;
 let visible = false;
-
+let distance = "0 km";
+let duration = "0 min";
 function handleMenuClick(e) {
   console.log("click", e);
 }
@@ -34,6 +35,8 @@ export default function RouteGeneral(props) {
         "http://localhost:3000/api/user/?idUser=RIPEJPBQWV"
       ).then((res) => res.json());
       numDeliveries = result.route.length;
+      distance = result.distance;
+      duration = result.duration;
       visible = true;
       setDeliveries(result.route);
     } catch (error) {
@@ -56,18 +59,20 @@ export default function RouteGeneral(props) {
         ]}
       ></PageHeader>
 
-      <div>
-        <div className={styles["div-route"]}>
-          <div>
-            <strong>Tiempo aproximado de ruta</strong>
-            <p>3 h 21m</p>
-          </div>
-          <div>
-            <strong>Distancia a recorrer</strong>
-            <p>3Km</p>
+      {visible && (
+        <div>
+          <div className={styles["div-route"]}>
+            <div>
+              <strong>Tiempo aproximado de ruta</strong>
+              <p>{duration}</p>
+            </div>
+            <div>
+              <strong>Distancia a recorrer</strong>
+              <p>{distance}</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <Row
         style={{
           height: "100%",
