@@ -176,7 +176,11 @@ export class formatText {
         origen +
           "-" +
           this.normalizeString(route[index].destination_addresses, true),
-        route[index].distance + "-" + route[index].duration
+        [
+          route[index].distance,
+          route[index].duration,
+          route[index].destination_addresses,
+        ]
       );
     }
     for (let index = 0; index < route.length; index++) {
@@ -186,7 +190,7 @@ export class formatText {
             this.normalizeString(route[index].destination_addresses, true) +
               "-" +
               this.normalizeString(route[i].destination_addresses, true),
-            0
+            ["", "", route[index].destination_addresses]
           );
         }
         position += 1;
@@ -216,5 +220,76 @@ export class formatText {
       }
     }
     return list;
+  }
+
+  createOrden(orden, map, route) {
+    let arrayOrden = orden.split(",");
+    let auxMap = new Map();
+    let newRoute = [];
+    for (let index = 0; index < arrayOrden.length; index++) {
+      if (index < arrayOrden.length - 1) {
+        let info = map.get(arrayOrden[index] + "-" + arrayOrden[index + 1]);
+        if (
+          map.get(arrayOrden[index] + "-" + arrayOrden[index + 1]) != undefined
+        ) {
+          info.pop();
+          auxMap.set(arrayOrden[index] + "-" + arrayOrden[index + 1], info);
+        } else {
+          let auxInfo = map.get(
+            arrayOrden[index + 1] + "-" + arrayOrden[index]
+          );
+          auxMap.set(
+            arrayOrden[index] + "-" + arrayOrden[index + 1],
+            this.deleteitem(auxInfo)
+          );
+        }
+      } else {
+        break;
+      }
+    }
+    for (const [clave, valor] of auxMap) {
+      let addressDes = valor[2];
+      for (let index = 0; index < route.length; index++) {
+        if (addressDes === route[index].destination_addresses) {
+          let delivery = route[index];
+          delivery.distance = valor[0];
+          delivery.duration = valor[1];
+          delivery.state = "En camino";
+          newRoute.push(delivery);
+        }
+      }
+    }
+
+    //console.log(newRoute);
+    return newRoute;
+  }
+  /**
+   *
+   * @param {*} array es el arreglo al cual se le va a eliminar un elemteno
+   * @returns un array sin el 2 elemento, modificar para que sea la n posicion
+   */
+  deleteitem(array) {
+    let aux = [];
+    let head = array.splice(0, 2);
+    let res = array.splice(1, 2);
+
+    aux = head.concat(res);
+    return aux;
+  }
+
+  getInfo(data) {
+    let duration = 0;
+    let distance = 0;
+    for (let index = 0; index < data.length; index++) {
+      let auxDuration = data[index].duration;
+      let auxDistance = data[index].distance;
+      duration += parseInt(auxDuration);
+      distance += parseFloat(auxDistance);
+    }
+
+    return {
+      dur: duration.toString() + " min",
+      dis: distance.toString() + " km",
+    };
   }
 }
