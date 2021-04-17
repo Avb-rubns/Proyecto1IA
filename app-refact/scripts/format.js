@@ -6,30 +6,40 @@ export class formatText {
    */
   createDirection(data) {
     let dir =
-      this.normalizeString(data.address) +
+      this.normalizeString(data.address, true) +
       "+" +
-      data.numhouse +
-      "," +
-      this.normalizeString(data.colonia) +
-      "," +
+      (data.numhouse ?? "") +
+      "+" +
+      this.normalizeString(data.colonia, true) +
+      "+" +
       data.postalcode +
-      "," +
-      this.normalizeString(data.city) +
-      "," +
-      this.normalizeString(data.state);
+      "+" +
+      this.normalizeString(data.city, true) +
+      "+" +
+      this.normalizeString(data.state, true);
     return dir;
+  }
+  cleanString(string) {
+    let res = "";
+    res = string.replace(/[++]{2}/g, "+");
+    return res;
   }
   /**
    *  remplaza la los espacios por un +, quita los signos de acentuacion
-   * @param {*} string recibe la direccion del envio
+   * @param {*} string recibe una direccion y le formatea
+   * quita signos de puntuacion y acentos
+   * quita espacios al inicio y final
+   *
    * @returns devuelve al direcion concatenada por +
    */
-  normalizeString(string) {
+  normalizeString(string, option) {
     let res = NaN;
     res = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     res = res.trim();
     res = res.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()”“"…]/g, "");
-    res = res.replace(/\s/g, "+");
+    if (option) {
+      res = res.replace(/\s/g, "+");
+    }
     return res.toLocaleLowerCase();
   }
   /**
@@ -44,7 +54,7 @@ export class formatText {
       data.lastname.substr(0, 2) +
       "-" +
       this.initaddress(data.address) +
-      data.numhouse +
+      (data.numhouse ?? "") +
       "-" +
       str;
     return id.toLocaleUpperCase();
@@ -64,7 +74,7 @@ export class formatText {
     } else {
       num = this.numrand;
     }
-    console.log(this.initaddress(data.address));
+    //console.log(this.initaddress(data.address));
     let id =
       data.username.substr(0, 2) +
       data.lastname.substr(0, 2) +
@@ -128,25 +138,12 @@ export class formatText {
   initaddress(string) {
     let ad = NaN;
     let res = "";
-    ad = this.initadd(string);
+    ad = this.normalizeString(string, false);
     ad = ad.replace(/av|y|de|calz|blvrd|calle|san|don/g, "");
     ad = ad.trim();
     let aux = ad.split(" ");
     res = this.str2(aux);
     return res;
-  }
-
-  /**
-   *
-   * @param {*} string : string a procesar
-   * @returns : un string cson signos de puntuacion o acentos
-   */
-  initadd(string) {
-    let res = NaN;
-    res = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    res = res.trim();
-    res = res.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()”“"…]/g, "");
-    return res.toLocaleLowerCase();
   }
   /**
    *
@@ -172,21 +169,23 @@ export class formatText {
   }
 
   createTable(origen, route) {
-    let graph = new Map();
+    let table = new Map();
     let position = 1;
     for (let index = 0; index < route.length; index++) {
-      graph.set(
-        origen + "-" + route[index].destination_addresses,
-        route[index].distance
+      table.set(
+        origen +
+          "-" +
+          this.normalizeString(route[index].destination_addresses, true),
+        route[index].distance + "-" + route[index].duration
       );
     }
     for (let index = 0; index < route.length; index++) {
       if (index < route.length) {
         for (let i = position; i < route.length; i++) {
-          graph.set(
-            route[index].destination_addresses +
+          table.set(
+            this.normalizeString(route[index].destination_addresses, true) +
               "-" +
-              route[i].destination_addresses,
+              this.normalizeString(route[i].destination_addresses, true),
             0
           );
         }
@@ -195,6 +194,27 @@ export class formatText {
         break;
       }
     }
-    return graph;
+    return table;
+  }
+
+  getClave(map) {
+    let auxP1 = "";
+    let list = [];
+    for (const [clave, _] of map) {
+      let point = String(clave).split("-");
+      list.push(point[0]);
+      auxP1 = point[0];
+      break;
+    }
+
+    for (let [clave, _] of map) {
+      let point = String(clave).split("-");
+      if (auxP1 == point[0]) {
+        list.push(point[1]);
+      } else {
+        break;
+      }
+    }
+    return list;
   }
 }
