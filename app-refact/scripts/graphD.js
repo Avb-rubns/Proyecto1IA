@@ -1,30 +1,48 @@
 import GraphVertex from "../data-structures/graph/GraphVertex";
 import GraphEdge from "../data-structures/graph/GraphEdge";
 import Graph from "../data-structures/graph/Graph";
-
+import { formatText } from "../scripts/format";
 export class GraphD {
-  createG() {
-    const vertexA = new GraphVertex("A");
-    const vertexB = new GraphVertex("B");
-    const vertexC = new GraphVertex("C");
-    const vertexD = new GraphVertex("D");
+  createG(map) {
+    try {
+      const format = new formatText();
+      const graph = new Graph(false);
 
-    const edgeAB = new GraphEdge(vertexA, vertexB, 5.3);
-    const edgeAC = new GraphEdge(vertexA, vertexC, 7.2);
-    const edgeAD = new GraphEdge(vertexA, vertexD, 3.1);
-    const edgeBC = new GraphEdge(vertexB, vertexC, 11);
-    const edgeBD = new GraphEdge(vertexB, vertexD, 6.6);
-    const edgeCD = new GraphEdge(vertexC, vertexD, 15.2);
+      let vertexs = format.getClave(map);
 
-    const graph = new Graph(false);
-    graph
-      .addEdge(edgeAB)
-      .addEdge(edgeAC)
-      .addEdge(edgeAD)
-      .addEdge(edgeBC)
-      .addEdge(edgeBD)
-      .addEdge(edgeCD);
+      /*let vertexA = new GraphVertex("A");
+      let vertexB = new GraphVertex("B");
+      const edgeAB = new GraphEdge(vertexA, vertexB, 5.3);
+      graph.addEdge(edgeAB);*/
 
-    return graph;
+      var vertex = new Map();
+      for (let index = 0; index < vertexs.length; index++) {
+        let key = String(vertexs[index]);
+        vertex.set(key, new GraphVertex(key));
+      }
+
+      //console.log(vertex);
+
+      var edge = [];
+      var index = 0;
+      for (const [clave, valor] of map) {
+        let point1 = String(clave).split("-");
+        let x1 = point1[0];
+        let x2 = point1[1];
+        let point2 = String(valor).split("-");
+        edge.push(
+          new GraphEdge(vertex.get(x1), vertex.get(x2), parseFloat(point2[0]))
+        );
+      }
+
+      for (let index = 0; index < edge.length; index++) {
+        graph.addEdge(edge[index]);
+      }
+
+      return graph;
+    } catch (error) {
+      console.log(error);
+      return { msj: "ERROR-graphD-C" };
+    }
   }
 }
