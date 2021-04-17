@@ -24,14 +24,12 @@ export class GraphD {
       //console.log(vertex);
 
       var edge = [];
-      var index = 0;
       for (const [clave, valor] of map) {
         let point1 = String(clave).split("-");
         let x1 = point1[0];
         let x2 = point1[1];
-        let point2 = String(valor).split("-");
         edge.push(
-          new GraphEdge(vertex.get(x1), vertex.get(x2), parseFloat(point2[0]))
+          new GraphEdge(vertex.get(x1), vertex.get(x2), parseFloat(valor[0]))
         );
       }
 
