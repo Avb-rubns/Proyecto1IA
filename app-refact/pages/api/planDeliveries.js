@@ -10,11 +10,13 @@ export default async function handler(req, res) {
     case "POST":
       try {
         const { entrega } = req.body;
-        const des = textF.createDirection(entrega);
+        let des = textF.createDirection(entrega);
+        des = textF.cleanString(des);
         const id = textF.createID(entrega);
+
         /* Pasar la direccion del usuario */
         let POINT_ORIGIN =
-          "Av+Don+Juande+Palafox+y+Mendoza,Centro,72000,Puebla,Pue";
+          "Av+Don+Juande+Palafox+y+Mendoza+Centro+72000+Puebla+Pue";
 
         const info = await serviceMaps.getInfo(POINT_ORIGIN, des);
 
@@ -30,6 +32,7 @@ export default async function handler(req, res) {
         serviceMongo.close();
       } catch (error) {
         res.status(404).send({ MSJ: "ERRO-PLD-P" });
+        console.log("ERROR-PLD-P" + error);
         serviceMongo.close();
       }
 
