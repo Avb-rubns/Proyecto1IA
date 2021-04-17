@@ -39,24 +39,29 @@ export default async function handler(req, res) {
         const { idUser } = req.query;
         const route = await service.getRoute(idUser);
         const dir = await service.getDicUser(idUser);
+
         const originUser = format.createDirection(dir);
-        let map = format.createTable(originUser, route);
+        const cleanOrigin = format.cleanString(originUser);
+
+        let map = format.createTable(cleanOrigin, route);
 
         for (let [clave, _] of map) {
           let key = String(clave);
           let points = key.split("-");
-          let x = format.normalizeString(points[0]);
-          let y = format.normalizeString(points[1]);
 
-          let res = await serviceMaps.getInfo(x, y);
+          let res = await serviceMaps.getInfo(points[0], points[1]);
           let distance = res.rows[0].elements[0].distance.text;
-          console.log(map.set(clave, distance));
-          map.set(clave, distance);
+          let duration = res.rows[0].elements[0].duration.text;
+          map.set(clave, distance + "-" + duration);
         }
 
-        //const graph = new GraphD();
-        //const minimumSpanningTree = prim(graph.createG());
-        //console.log(minimumSpanningTree.toString());
+        //console.log(map);
+        const g = new GraphD();
+        const graph = g.createG(map);
+
+        console.log(graph);
+        const minimumSpanningTree = prim(graph);
+        console.log(minimumSpanningTree.toString());
         /*console.log(route);*/
         res.status(200).send({ route });
         service.close();
