@@ -52,18 +52,24 @@ export default async function handler(req, res) {
           let res = await serviceMaps.getInfo(points[0], points[1]);
           let distance = res.rows[0].elements[0].distance.text;
           let duration = res.rows[0].elements[0].duration.text;
-          map.set(clave, distance + "-" + duration);
+          let addressDes = res.destination_addresses[0];
+          let addressOri = res.origin_addresses[0];
+          map.set(clave, [distance, duration, addressDes, addressOri]);
         }
 
         //console.log(map);
         const g = new GraphD();
         const graph = g.createG(map);
 
-        console.log(graph);
+        //console.log(graph);
         const minimumSpanningTree = prim(graph);
-        console.log(minimumSpanningTree.toString());
-        /*console.log(route);*/
-        res.status(200).send({ route });
+        //console.log(minimumSpanningTree.toString());
+        let orden = minimumSpanningTree.toString();
+        const RoutePlan = format.createOrden(orden, map, route);
+        let info = format.getInfo(RoutePlan);
+        res
+          .status(200)
+          .send({ route: RoutePlan, distance: info.dis, duration: info.dur });
         service.close();
       } catch (error) {
         console.log("Error-Get" + error);
