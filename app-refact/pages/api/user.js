@@ -31,6 +31,10 @@ export default async function handler(req, res) {
 
     case "GET":
       try {
+        const { idUser } = req.query;
+        const data = await service.getPackages(idUser);
+        res.status(200).send({ packages: data });
+        service.close();
       } catch (error) {
         console.log("Error-Get" + error);
         res.status(403).send({ resp: "Error-02" });

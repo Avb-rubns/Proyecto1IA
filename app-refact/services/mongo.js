@@ -155,4 +155,16 @@ export class MongoDBService {
       return { msj: "Error al obtener Route" };
     }
   }
+
+  async getPackages(idUser) {
+    try {
+      let result = NaN;
+      const data = await User.findOne({ idUser: idUser });
+      result = Object.assign(data.otw, data.received);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return { msj: "Error al obtener Route" };
+    }
+  }
 }

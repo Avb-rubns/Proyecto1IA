@@ -16,16 +16,29 @@ export default function Principal(data) {
   const [visibleRoute, setVisibleR] = useState();
   const [visibleTable, setVisibleT] = useState();
 
+  const getPackages = async () => {
+    try {
+      const result = await fetch(
+        "http://localhost:3000/api/user/?idUser=RIPEJPBQWV"
+      ).then((res) => res.json());
+      console.log(result.packages);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleClick = (e) => {
     console.log("click ", e.key);
     switch (e.key) {
       case "1":
         console.log("Logistica");
         setVisibleT(false);
+        setVisibleR(true);
         break;
       case "2":
         console.log("Paquetes");
         setVisibleT(true);
+        setVisibleR(false);
         break;
 
       default:
@@ -69,8 +82,7 @@ export default function Principal(data) {
             <div className={styles["container-main"]}>
               {visibleTable && <TablePackages />}
               {/*<PlanRoute showModal={showModal} />*/}
-              <RouteGeneral showModal={showModal} />
-              {/* visibleRoute &&  <RouteGeneral showModal={showModal} />*/}
+              {visibleRoute && <RouteGeneral showModal={showModal} />}
             </div>
           </Col>
         </Row>
