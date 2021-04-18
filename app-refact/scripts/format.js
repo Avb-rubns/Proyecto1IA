@@ -288,8 +288,8 @@ export class formatText {
     }
 
     return {
-      dur: duration.toString() + " min",
-      dis: distance.toString() + " km",
+      dur: duration.toFixed(0).toString() + " min",
+      dis: distance.toFixed(1).toString() + " km",
     };
   }
 }

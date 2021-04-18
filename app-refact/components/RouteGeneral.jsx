@@ -32,7 +32,7 @@ export default function RouteGeneral(props) {
   const getRoute = async () => {
     try {
       const result = await fetch(
-        "http://localhost:3000/api/user/?idUser=RIPEJPBQWV"
+        "http://localhost:3000/api/planDeliveries/?idUser=RIPEJPBQWV"
       ).then((res) => res.json());
       numDeliveries = result.route.length;
       distance = result.distance;

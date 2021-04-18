@@ -1,15 +1,10 @@
 import { MongoDBService } from "../../services/mongo";
 import { formatText } from "../../scripts/format";
 import { Auth } from "../../services/auth";
-import { MapsService } from "../../services/maps";
-import { GraphD } from "../../scripts/graphD";
-import prim from "../../scripts/prim";
 
 export default async function handler(req, res) {
   const service = new MongoDBService();
-  const format = new formatText();
   const auth = new Auth();
-  const serviceMaps = new MapsService();
   switch (req.method) {
     case "POST":
       try {
@@ -36,41 +31,6 @@ export default async function handler(req, res) {
 
     case "GET":
       try {
-        const { idUser } = req.query;
-        const route = await service.getRoute(idUser);
-        const dir = await service.getDicUser(idUser);
-
-        const originUser = format.createDirection(dir);
-        const cleanOrigin = format.cleanString(originUser);
-
-        let map = format.createTable(cleanOrigin, route);
-
-        for (let [clave, _] of map) {
-          let key = String(clave);
-          let points = key.split("-");
-
-          let res = await serviceMaps.getInfo(points[0], points[1]);
-          let distance = res.rows[0].elements[0].distance.text;
-          let duration = res.rows[0].elements[0].duration.text;
-          let addressDes = res.destination_addresses[0];
-          let addressOri = res.origin_addresses[0];
-          map.set(clave, [distance, duration, addressDes, addressOri]);
-        }
-
-        //console.log(map);
-        const g = new GraphD();
-        const graph = g.createG(map);
-
-        //console.log(graph);
-        const minimumSpanningTree = prim(graph);
-        //console.log(minimumSpanningTree.toString());
-        let orden = minimumSpanningTree.toString();
-        const RoutePlan = format.createOrden(orden, map, route);
-        let info = format.getInfo(RoutePlan);
-        res
-          .status(200)
-          .send({ route: RoutePlan, distance: info.dis, duration: info.dur });
-        service.close();
       } catch (error) {
         console.log("Error-Get" + error);
         res.status(403).send({ resp: "Error-02" });
