@@ -79,14 +79,17 @@ export default function RouteGeneral(props) {
           width: "100%",
         }}
       >
-        <Col span={19}></Col>
-        <Col span={5}>
-          <div className={styles["container-btn-form"]}>
-            <strong>Entregas</strong>
-            <p>{visible && numDeliveries}</p>
-          </div>
-          <RouteDeliveries deliveries={RouteD} />
-        </Col>
+        {visible &&
+          ((<Col span={19}></Col>),
+          (
+            <Col span={5}>
+              <div className={styles["container-btn-form"]}>
+                <strong>Entregas</strong>
+                <p>{numDeliveries}</p>
+              </div>
+              <RouteDeliveries deliveries={RouteD} />
+            </Col>
+          ))}
       </Row>
     </>
   );
