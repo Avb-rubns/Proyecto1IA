@@ -292,4 +292,18 @@ export class formatText {
       dis: distance.toFixed(1).toString() + " km",
     };
   }
+
+  cretalistTable(data) {
+    let list = [];
+    for (let index = 0; index < data.length; index++) {
+      let aux = {
+        key: (index + 1).toString(),
+        package: data[index].idDelivery,
+        state: data[index].state ?? "",
+        date: data[index].date ?? "",
+      };
+      list.push(aux);
+    }
+    return list;
+  }
 }

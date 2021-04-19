@@ -5,6 +5,7 @@ import { Auth } from "../../services/auth";
 export default async function handler(req, res) {
   const service = new MongoDBService();
   const auth = new Auth();
+  const formt = new formatText();
   switch (req.method) {
     case "POST":
       try {
@@ -32,8 +33,9 @@ export default async function handler(req, res) {
     case "GET":
       try {
         const { idUser } = req.query;
-        const data = await service.getPackages(idUser);
-        res.status(200).send({ packages: data });
+        const info = await service.getPackages(idUser);
+        const data = formt.cretalistTable(info);
+        res.status(200).send({ list: data });
         service.close();
       } catch (error) {
         console.log("Error-Get" + error);

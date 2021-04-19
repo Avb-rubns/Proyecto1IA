@@ -1,19 +1,5 @@
 import { Table, Button, Dropdown, Menu } from "antd";
 import { RightOutlined } from "@ant-design/icons";
-const dataSource = [
-  {
-    key: "1",
-    package: "DPTA-6231-AX21",
-    state: "Recibido",
-    date: "22/02/21",
-  },
-  {
-    key: "2",
-    package: "DPTA-6231-AX22",
-    state: "En camino",
-    date: "",
-  },
-];
 const columns = [
   {
     title: "Entrega",
@@ -34,7 +20,7 @@ const columns = [
 
 export default function TablePackages(props) {
   const data = props.data;
-  console.log(data);
+  console.log();
   function handleMenuClick(e) {
     console.log("click", e);
     if (e.key == 1) {
@@ -68,7 +54,7 @@ export default function TablePackages(props) {
         <Table
           style={{ padding: "1rem 4rem" }}
           pagination={{ position: ["bottomCenter"] }}
-          dataSource={dataSource}
+          dataSource={data}
           columns={columns}
         />
       </div>

@@ -37,7 +37,8 @@ export default function Principal(data) {
         break;
       case "2":
         console.log("Paquetes");
-
+        const data = getPackages();
+        console.log(data);
         setVisibleT(true);
         setVisibleR(false);
         break;
@@ -81,7 +82,7 @@ export default function Principal(data) {
           {/* Main */}
           <Col span={20}>
             <div className={styles["container-main"]}>
-              {visibleTable && <TablePackages data={{ msj: "Holi" }} />}
+              {visibleTable && <TablePackages data={data.list} />}
               {/*<PlanRoute showModal={showModal} />*/}
               {visibleRoute && <RouteGeneral showModal={showModal} />}
             </div>
