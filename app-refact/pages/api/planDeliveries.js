@@ -84,6 +84,13 @@ export default async function handler(req, res) {
         //console.log(minimumSpanningTree.toString());
         let orden = minimumSpanningTree.toString();
         const RoutePlan = textF.createOrden(orden, map, route);
+        await serviceMongo.updateDeliveries(idUser, RoutePlan);
+        for (let index = 0; index < RoutePlan.length; index++) {
+          await serviceMongo.updateOTW(
+            RoutePlan[index].idUser ?? "",
+            RoutePlan[index].idDelivery
+          );
+        }
         let info = textF.getInfo(RoutePlan);
         res
           .status(200)

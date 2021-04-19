@@ -167,4 +167,59 @@ export class MongoDBService {
       return { msj: "Error al obtener Route" };
     }
   }
+  /**
+   *
+   * @param {*} idUser Id sel usuario
+   * @param {*} Route  lista de entragas en orden
+   * acrualiza la lista de entregas del repartidor
+   */
+  async updateDeliveries(idUser, Route) {
+    try {
+      const user = { idUser: idUser };
+      const update = { route: Route };
+      const data = await User.findOneAndUpdate(user, update);
+      //console.log(data);
+    } catch (error) {
+      console.log("ERROR-UPDATE-MONGO:" + error);
+    }
+  }
+
+  async updateOTW(idUser, idDelivery) {
+    try {
+      if (idUser != "") {
+        const user = { idUser: idUser };
+        const data = await User.findOne(user);
+        await User.updateOne(
+          { user },
+          { $pull: { otw: { idDelivery: idDelivery }, state: "En Camino" } }
+        );
+        let index = data.otw.findIndex(
+          (delivery) => delivery.idDelivery === idDelivery
+        );
+        data.otw[index].state = "En camino";
+        data.save();
+      } else {
+        const data = await ListDelyveries.findOne({ id: "general" });
+        //console.log(data);
+
+        let index = data.deliveries.findIndex(
+          (delivery) => delivery.idDelivery === idDelivery
+        );
+        await ListDelyveries.updateOne(
+          { id: "general" },
+          {
+            $pull: {
+              deliveries: {
+                idDelivery: idDelivery,
+                state: "En camino",
+              },
+            },
+          }
+        );
+        data.deliveries[index].state = "En camino";
+        await data.save();
+      }
+      console.log(data);
+    } catch (error) {}
+  }
 }

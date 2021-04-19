@@ -79,9 +79,9 @@ export default function RouteGeneral(props) {
           width: "100%",
         }}
       >
-        {visible &&
-          ((<Col span={19}></Col>),
-          (
+        {visible && (
+          <div className={styles["div-map-de"]}>
+            <Col span={19}></Col>
             <Col span={5}>
               <div className={styles["container-btn-form"]}>
                 <strong>Entregas</strong>
@@ -89,7 +89,8 @@ export default function RouteGeneral(props) {
               </div>
               <RouteDeliveries deliveries={RouteD} />
             </Col>
-          ))}
+          </div>
+        )}
       </Row>
     </>
   );
