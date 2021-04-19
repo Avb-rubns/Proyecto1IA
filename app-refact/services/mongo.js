@@ -220,6 +220,8 @@ export class MongoDBService {
         await data.save();
       }
       console.log(data);
-    } catch (error) {}
+    } catch (error) {
+      console.log("ERROR" + error);
+    }
   }
 }
