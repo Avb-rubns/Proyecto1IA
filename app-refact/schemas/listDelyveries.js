@@ -8,6 +8,7 @@ const listSchema = new Schema(
       {
         idDelivery: String,
         state: String,
+        date: String,
       },
     ],
   },
