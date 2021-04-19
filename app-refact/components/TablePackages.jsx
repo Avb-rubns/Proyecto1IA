@@ -34,6 +34,7 @@ const columns = [
 
 export default function TablePackages(props) {
   const data = props.data;
+  console.log(data);
   function handleMenuClick(e) {
     console.log("click", e);
     if (e.key == 1) {
