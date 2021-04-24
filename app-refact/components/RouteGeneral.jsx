@@ -87,7 +87,7 @@ export default function RouteGeneral(props) {
                 <strong>Entregas</strong>
                 <p>{numDeliveries}</p>
               </div>
-              <RouteDeliveries deliveries={RouteD} />
+              {RouteD && <RouteDeliveries deliveries={RouteD} />}
             </Col>
           </div>
         )}

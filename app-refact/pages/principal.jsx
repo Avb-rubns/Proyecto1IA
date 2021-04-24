@@ -3,27 +3,43 @@ import Header from "../components/Header";
 import TablePackages from "../components/TablePackages";
 import PlanRoute from "../components/PlanRoute";
 import RouteGeneral from "../components/RouteGeneral";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlanModal from "../components/PlanModal";
 import useModal from "../hooks/useModal";
 import styles from "../styles/Principal.module.css";
 import { Row, Col, Menu } from "antd";
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
+import useSession from "../hooks/useSession";
+import { parseCookies } from "nookies";
 
 export default function Principal(data) {
   const { visible, showModal, handleCancel } = useModal();
   const [visiblePlan, setVisibleP] = useState();
   const [visibleRoute, setVisibleR] = useState();
   const [visibleTable, setVisibleT] = useState();
+  const { isLogged } = useSession();
+  const router = useRouter();
+  const { token } = parseCookies();
+  const [info, setInfo] = useState({});
+  useEffect(() => {
+    if (!isLogged) {
+      router.push("/login");
+    }
+  }, [isLogged]);
+  useEffect(() => {
+    getInfoUser(token);
+    console.log(info.username);
+  }, []);
 
-  const getPackages = async () => {
+  const getInfoUser = async (token) => {
     try {
       const result = await fetch(
-        "http://localhost:3000/api/user/?idUser=RIPEJPBQWV"
+        "http://localhost:3000/api/user/?option=true&idUser=" + token
       ).then((res) => res.json());
-      console.log(result.packages);
+      setInfo(result.user);
     } catch (error) {
-      console.log(error);
+      console.log("Error-get", error);
     }
   };
 
@@ -37,8 +53,8 @@ export default function Principal(data) {
         break;
       case "2":
         console.log("Paquetes");
-        const data = getPackages();
-        console.log(data);
+        //const data = getPackages();
+        //console.log(data);
         setVisibleT(true);
         setVisibleR(false);
         break;
@@ -50,7 +66,7 @@ export default function Principal(data) {
 
   return (
     <Template title="Principal">
-      <Header name={data.name} exit={data.exit} />
+      <Header name={info.username + " " + info.lastname} exit={data.exit} />
       <div className={styles["container"]}>
         <Row
           style={{
