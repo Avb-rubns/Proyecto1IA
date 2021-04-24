@@ -1,36 +1,35 @@
 import Template from "../components/Template";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/Login.module.css";
 import { Form, Typography, Input, Button, Divider, Tooltip } from "antd";
 import { blue } from "@ant-design/colors";
 import Image from "next/image";
 import RegisterModal from "../components/RegisterModal";
 import useModal from "../hooks/useModal";
+import useSession from "../hooks/useSession";
+import { useRouter } from "next/router";
 
 const { Title } = Typography;
 
-export default function Login(providers) {
+export default function Login() {
   const { visible, showModal, handleCancel } = useModal();
   const [sesion, setForm] = useState({
     email: "",
     password: "",
   });
+  const { isLogged, login } = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (isLogged) {
+      router.push("/principal");
+    }
+  }, [isLogged]);
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm({ ...sesion, [name]: value });
   };
   const Sumit = async () => {
-    try {
-      const result = await fetch("http://localhost:3000/api/user", {
-        method: "POST",
-        headers: {
-          "content-Type": "application/json",
-        },
-        body: JSON.stringify({ sesion }),
-      }).then((res) => res.json());
-    } catch (error) {
-      console.log(error);
-    }
+    login({ sesion });
   };
   return (
     <Template title="Acceso">

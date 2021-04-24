@@ -24,6 +24,8 @@ export default function RegisterModal(props) {
     postalcode: "",
     city: "",
     state: "",
+    token: "",
+    plan: "",
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
