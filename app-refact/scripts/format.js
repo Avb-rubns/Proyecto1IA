@@ -1,3 +1,5 @@
+import { route } from "next/dist/next-server/server/router";
+
 export class formatText {
   /**
    *
@@ -305,5 +307,20 @@ export class formatText {
       list.push(aux);
     }
     return list;
+  }
+
+  infoUser(data) {
+    let res = {
+      username: data.username,
+      lastname: data.lastname,
+      address: data.address,
+      colonia: data.colonia,
+      numhouse: data.numhouse,
+      postalcode: data.postalcode,
+      city: data.city,
+      state: data.state,
+      route: data.route,
+    };
+    return res;
   }
 }

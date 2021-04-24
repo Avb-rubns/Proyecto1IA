@@ -3,7 +3,6 @@ let bcrypt = require("bcryptjs");
 export class Auth {
   async validate(data, session) {
     try {
-      console.log(data);
       if (session.email === data.email) {
         let res = bcrypt.compareSync(session.password, data.password);
         return res;
@@ -15,12 +14,7 @@ export class Auth {
     }
   }
   async getDate(data) {
-    for (let i = 0; i < data.length; i++) {
-      if (data.name == "password") {
-        data.splice(i, 1);
-        break;
-      }
-    }
+    delete data.password;
     return data;
   }
 }

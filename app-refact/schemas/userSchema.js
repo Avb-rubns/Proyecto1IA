@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema(
   {
     idUser: String,
+    token: String,
     username: String,
     lastname: String,
     cell: String,
@@ -15,6 +16,7 @@ const userSchema = new Schema(
     postalcode: String,
     city: String,
     state: String,
+    plan: String,
     route: [
       {
         idDelivery: String,

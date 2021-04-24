@@ -64,6 +64,22 @@ export class MongoDBService {
     }
   }
 
+  async setToken(idUser, token) {
+    try {
+      const user = { idUser: idUser };
+      const update = { token: token };
+      await User.findOneAndUpdate(user, update);
+    } catch (error) {
+      console.log("ERROR-SET-M", error);
+    }
+  }
+  async getInfo(token) {
+    try {
+      const info = await User.findOne({ token: token });
+      return info;
+    } catch (error) {}
+  }
+
   /* nota: modificar para qeu sea el id del repartidor y no su correo */
   async insertDelivery(delivery, user, register) {
     try {
@@ -89,10 +105,10 @@ export class MongoDBService {
   /* nota: modificar para qeu sea el id del repartidor y no su correo */
   async deleteDelivery(ids, user) {
     try {
-      console.log(ids);
+      //console.log(ids);
       let result = NaN;
       const dataOld = await User.findOne({ email: "prueba@mail.com" });
-      console.log(dataOld);
+      //console.log(dataOld);
       if (ids.idUser != "") {
         await User.updateOne(
           { email: "prueba@mail.com" },
@@ -219,7 +235,7 @@ export class MongoDBService {
         data.deliveries[index].state = "En camino";
         await data.save();
       }
-      console.log(data);
+      //console.log(data);
     } catch (error) {
       console.log("ERROR" + error);
     }
