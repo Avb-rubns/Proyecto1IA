@@ -20,7 +20,7 @@ export default function Header(props) {
           </Title>
           <div className={styles["container-session"]}>
             <Avatar size="small" icon={<UserOutlined />} />
-            <p>{props.name}</p>
+            <p>{props.name ? props.name : "Cargando"}</p>
             <Popover content={content}>
               <Button
                 type="text"
