@@ -5,7 +5,6 @@ export default function useModal() {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showModal = () => {
-    console.log("#");
     setVisible(true);
   };
 
