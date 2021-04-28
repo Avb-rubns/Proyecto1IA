@@ -12,7 +12,8 @@ export default async function handler(req, res) {
       try {
         const { sesion } = req.body;
         const data = await service.login(sesion);
-        if (data.msj === "Error L001") {
+        console.log(data);
+        if (data.msj == "Error L001" || data == null) {
           res.status(404).send({ resp: "El usuario no esta registrado" });
           service.close();
         } else {
@@ -35,14 +36,14 @@ export default async function handler(req, res) {
 
     case "GET":
       try {
-        const { idUser, option } = req.query;
+        const { idUser, option, token } = req.query;
         if (!option) {
           const info = await service.getPackages(idUser);
           const data = formt.cretalistTable(info);
           res.status(200).send({ list: data });
           service.close();
         } else {
-          const info = await service.getInfo(idUser);
+          const info = await service.getInfo(token);
           const user = formt.infoUser(info);
           res.status(200).send({ user });
           service.close();
@@ -53,8 +54,23 @@ export default async function handler(req, res) {
         service.close();
       }
       break;
+
+    case "DELETE":
+      try {
+        const { idUser, token } = req.body;
+        console.log(token, idUser);
+        const result = await service.deleteToken(idUser, token);
+        service.close();
+        res.status(200).send({ result });
+      } catch (error) {
+        res.status(404).send({ msj: "Error" });
+        service.close();
+      }
+
+      break;
     default:
       res.status(404).send({ result: "no entendi tu peticion" });
+      service.close();
       break;
   }
 }
