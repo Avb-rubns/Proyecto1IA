@@ -1,4 +1,5 @@
 import { PageHeader, Button, Dropdown, Menu, Row, Col } from "antd";
+import { set } from "mongoose";
 import { useState } from "react";
 import styles from "../styles/PlanModal.module.css";
 import { RouteDeliveries } from "./RouteDeliveries";
@@ -9,7 +10,6 @@ let date =
 
 let dateTime = date;
 let numDeliveries = NaN;
-let visible = false;
 let distance = "0 km";
 let duration = "0 min";
 function handleMenuClick(e) {
@@ -17,10 +17,14 @@ function handleMenuClick(e) {
 }
 
 export default function RouteGeneral(props) {
+  const [plan, setPlan] = useState();
   const [RouteD, setDeliveries] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const idUser = props.idUser;
+  //setPlan(props.plan);
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item danger onClick={props.deleteAll}>
+      <Menu.Item danger onClick={canceleRoute}>
         Cancelar Ruta
       </Menu.Item>
       <Menu.Item danger onClick={props.delete}>
@@ -37,8 +41,22 @@ export default function RouteGeneral(props) {
       numDeliveries = result.route.length;
       distance = result.distance;
       duration = result.duration;
-      visible = true;
+      setVisible(true);
       setDeliveries(result.route);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const canceleRoute = async () => {
+    try {
+      const result = await fetch("http://localhost:3000/api/planDeliveries/", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idUser: idUser }),
+      }).then((res) => res.json());
+      setVisible(false);
     } catch (error) {
       console.log(error);
     }
