@@ -1,28 +1,34 @@
 import styles from "../styles/PlanModal.module.css";
+import { parseCookies } from "nookies";
 import { Col, Typography, Button, Divider } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 const { Text } = Typography;
 
-const deleteDelivery = async (ids) => {
-  try {
-    console.log(ids);
-    const result = await fetch(
-      "http://localhost:3000/api/planDeliveries/?idUser=RIPEJPBQWV",
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ids }),
-      }
-    ).then((res) => res.json());
-    console.log(result);
-  } catch (error) {
-    console.log(error);
-  }
-};
 export function Delivery(props) {
+  const { token } = parseCookies();
+  const [iduser, setId] = useState(props.idUser);
+  console.log("iduser: ", token);
+
+  const deleteDelivery = async (delivery) => {
+    try {
+      console.log(delivery);
+      const result = await fetch(
+        "http://localhost:3000/api/planDeliveries/?token=" + token,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ delivery }),
+        }
+      ).then((res) => res.json());
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <Col className="gutter-row" span={24} style={{ margin: 0, padding: 0 }}>

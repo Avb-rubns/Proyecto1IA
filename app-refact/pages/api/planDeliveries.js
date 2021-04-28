@@ -41,9 +41,10 @@ export default async function handler(req, res) {
 
     case "DELETE":
       try {
-        const { iduser } = req.query;
-        const { idDelivery } = req.body;
-        const r = await serviceMongo.deleteDelivery(idDelivery, idUser);
+        const { token } = req.query;
+        const { delivery } = req.body;
+        const info = await serviceMongo.getInfo(token);
+        const r = await serviceMongo.deleteDelivery(delivery, info.idUser);
         res.status(200).send({ r });
         serviceMongo.close();
       } catch (error) {
@@ -56,12 +57,13 @@ export default async function handler(req, res) {
       try {
         const { idUser } = req.query;
         const plan = await serviceMongo.getPlan(idUser);
-        if (!plan) {
+        if (plan) {
           const route = await serviceMongo.getRoute(idUser);
+          console.log(route);
           let info = textF.getInfo(route);
           res
             .status(200)
-            .send({ route: RoutePlan, distance: info.dis, duration: info.dur });
+            .send({ route: route, distance: info.dis, duration: info.dur });
           serviceMongo.close();
         } else {
           const route = await serviceMongo.getRoute(idUser);
@@ -109,7 +111,7 @@ export default async function handler(req, res) {
           serviceMongo.close();
         }
       } catch (error) {
-        console.log("ERRO-PL-02" + error);
+        console.log("ERRO-PL-02:" + error);
         res.status(404).send({ MSJ: "ERRO-PL-G" });
         serviceMongo.close();
       }

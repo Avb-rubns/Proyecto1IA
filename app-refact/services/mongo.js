@@ -106,29 +106,29 @@ export class MongoDBService {
     }
   }
   /* nota: modificar para qeu sea el id del repartidor y no su correo */
-  async deleteDelivery(ids, user) {
+  async deleteDelivery(delivery, user) {
     try {
-      //console.log(ids);
+      console.log("delivery: ", delivery, "user: ", user);
       let result = NaN;
       const dataOld = await User.findOne({ idUser: user });
       //console.log(dataOld);
-      if (ids.idUser !== "") {
+      if (delivery.idUser !== "") {
         await User.updateOne(
           { idUser: user },
-          { $pull: { route: { idDelivery: ids.idDelivery } } }
+          { $pull: { route: { idDelivery: delivery.idDelivery } } }
         );
         await User.updateOne(
-          { idUser: ids.idUser },
-          { $pull: { otw: { idDelivery: ids.idDelivery } } }
+          { idUser: delivery.idUser },
+          { $pull: { otw: { idDelivery: delivery.idDelivery } } }
         );
       } else {
         await User.updateOne(
           { idUser: user },
-          { $pull: { route: { idDelivery: ids.idDelivery } } }
+          { $pull: { route: { idDelivery: delivery.idDelivery } } }
         );
         await ListDelyveries.updateOne(
           { id: "general" },
-          { $pull: { deliveries: { idDelivery: ids.idDelivery } } }
+          { $pull: { deliveries: { idDelivery: delivery.idDelivery } } }
         );
       }
       const dataU = await User.findOne({ idUser: user });
@@ -205,12 +205,12 @@ export class MongoDBService {
 
   async updateOTW(idUser, idDelivery) {
     try {
-      if (idUser != "") {
+      if (idUser !== "") {
         const user = { idUser: idUser };
         const data = await User.findOne(user);
         await User.updateOne(
           { user },
-          { $pull: { otw: { idDelivery: idDelivery }, state: "En Camino" } }
+          { $pull: { otw: { idDelivery: idDelivery }, state: "En camino" } }
         );
         let index = data.otw.findIndex(
           (delivery) => delivery.idDelivery === idDelivery
