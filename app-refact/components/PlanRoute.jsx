@@ -4,6 +4,7 @@ export default function PlanRoute(props) {
   return (
     <>
       <PageHeader
+        pla={props.plan}
         ghost={false}
         title="Planea una ruta"
         extra={[
