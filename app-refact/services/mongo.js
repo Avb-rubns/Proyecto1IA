@@ -78,7 +78,9 @@ export class MongoDBService {
     try {
       const info = await User.findOne({ token: token });
       return info;
-    } catch (error) {}
+    } catch (error) {
+      console.log("ERROR_MONGO_getInfo: ", error);
+    }
   }
 
   /* nota: modificar para qeu sea el id del repartidor y no su correo */
@@ -176,8 +178,10 @@ export class MongoDBService {
   async getPackages(idUser) {
     try {
       let result = NaN;
+      console.log(idUser);
       const data = await User.findOne({ idUser: idUser });
-      result = Object.assign(data.otw, data.received);
+      result = Object.assign(data.otw ?? {}, data.received ?? {});
+      console.log("result getPackages:", result);
       return result;
     } catch (error) {
       console.log(error);
