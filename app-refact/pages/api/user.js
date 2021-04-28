@@ -41,20 +41,27 @@ export default async function handler(req, res) {
 
     case "GET":
       try {
-        const { idUser, option, token } = req.query;
-        if (!option) {
-          const info = await service.getPackages(idUser);
+        const { iduser, option, token } = req.query;
+        console.log("iduser: ", iduser, "option: ", option, "token: ", token);
+        console.log("option: ", !option);
+        if (option == "false") {
+          console.log("idUser: ", iduser);
+          console.log("option: ", option);
+          const info = await service.getPackages(iduser);
           const data = formt.cretalistTable(info);
-          res.status(200).send({ list: data });
+          res.status(200).send({ data });
           service.close();
         } else {
+          console.log("option: ", option);
+          console.log("token: ", token);
           const info = await service.getInfo(token);
+          console.log(info);
           const user = formt.infoUser(info);
           res.status(200).send({ user });
           service.close();
         }
       } catch (error) {
-        console.log("Error-Get" + error);
+        console.log("Error-Get: " + error);
         res.status(403).send({ resp: "Error-02" });
         service.close();
       }
