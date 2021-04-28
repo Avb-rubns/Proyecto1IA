@@ -17,6 +17,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 const { Title } = Typography;
 
 export default function PlanModal(props) {
+  const [iduser, setID] = useState(props.iduser);
   const onKeyPressEvent = (event) => {
     const keyCode = event.keyCode || event.which;
     const keyValue = String.fromCharCode(keyCode);
@@ -43,13 +44,16 @@ export default function PlanModal(props) {
 
   const onSubmitAdd = async () => {
     try {
-      const result = await fetch("http://localhost:3000/api/planDeliveries", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ entrega }),
-      }).then((res) => res.json());
+      const result = await fetch(
+        "http://localhost:3000/api/planDeliveries/?iduser=" + iduser,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ entrega }),
+        }
+      ).then((res) => res.json());
       setDeliveries([...listDeliveries, { ...result }]);
     } catch (error) {
       console.log(error);

@@ -38,7 +38,7 @@ export default function Principal() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ idUser: "RIPEJPBQWV", token: token }),
+      body: JSON.stringify({ idUser: info.idUser, token: token }),
     }).then((res) => res.json());
     logOut();
     router.push("/login");
@@ -49,7 +49,7 @@ export default function Principal() {
       "http://localhost:3000/api/user/?option=1&token=" + token
     ).then((res) => res.json());
     setInfo(result.user);
-    console.log(info);
+    setPlan(result.user.plan);
   };
 
   const handleClick = (e) => {
@@ -62,8 +62,6 @@ export default function Principal() {
         break;
       case "2":
         console.log("Paquetes");
-        //const data = getPackages();
-        //console.log(data);
         setVisibleT(true);
         setVisibleR(false);
         break;
@@ -125,6 +123,7 @@ export default function Principal() {
           showModal={showModal}
           handleCancel={handleCancel}
           title={"Crear Entregas"}
+          iduser={info.idUser}
         />
       )}
     </Template>
