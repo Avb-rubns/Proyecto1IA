@@ -1,7 +1,6 @@
 import Template from "../components/Template";
 import Header from "../components/Header";
 import TablePackages from "../components/TablePackages";
-import PlanRoute from "../components/PlanRoute";
 import RouteGeneral from "../components/RouteGeneral";
 import { useState, useEffect } from "react";
 import PlanModal from "../components/PlanModal";
@@ -13,15 +12,17 @@ import { useRouter } from "next/router";
 import useSession from "../hooks/useSession";
 import { parseCookies } from "nookies";
 
-export default function Principal(data) {
+export default function Principal() {
   const { visible, showModal, handleCancel } = useModal();
-  const [visiblePlan, setVisibleP] = useState();
-  const [visibleRoute, setVisibleR] = useState();
-  const [visibleTable, setVisibleT] = useState();
-  const { isLogged } = useSession();
+  const [plan, setPlan] = useState(false);
+  const [visibleRoute, setVisibleR] = useState(false);
+  const [visibleTable, setVisibleT] = useState(false);
+
+  const { isLogged, logOut } = useSession();
   const router = useRouter();
+  const [info, setInfo] = useState(null);
   const { token } = parseCookies();
-  const [info, setInfo] = useState({});
+
   useEffect(() => {
     if (!isLogged) {
       router.push("/login");
@@ -32,15 +33,24 @@ export default function Principal(data) {
     console.log(info.username);
   }, []);
 
+  const exit = async () => {
+    await fetch("http://localhost:3000/api/user/", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idUser: "RIPEJPBQWV", token: token }),
+    }).then((res) => res.json());
+    logOut();
+    router.push("/login");
+  };
+
   const getInfoUser = async (token) => {
-    try {
-      const result = await fetch(
-        "http://localhost:3000/api/user/?option=true&idUser=" + token
-      ).then((res) => res.json());
-      setInfo(result.user);
-    } catch (error) {
-      console.log("Error-get", error);
-    }
+    const result = await fetch(
+      "http://localhost:3000/api/user/?option=true&token=" + token
+    ).then((res) => res.json());
+    setInfo(result.user);
+    console.log(info);
   };
 
   const handleClick = (e) => {
@@ -66,7 +76,7 @@ export default function Principal(data) {
 
   return (
     <Template title="Principal">
-      <Header name={info.username + " " + info.lastname} exit={data.exit} />
+      <Header name={info?.username + " " + info?.lastname} exit={exit} />
       <div className={styles["container"]}>
         <Row
           style={{
@@ -98,9 +108,14 @@ export default function Principal(data) {
           {/* Main */}
           <Col span={20}>
             <div className={styles["container-main"]}>
-              {visibleTable && <TablePackages data={data.list} />}
-              {/*<PlanRoute showModal={showModal} />*/}
-              {visibleRoute && <RouteGeneral showModal={showModal} />}
+              {visibleTable && <TablePackages data={{}} />}
+              {visibleRoute && (
+                <RouteGeneral
+                  idUser={info.idUser}
+                  plan={info.plan}
+                  showModal={showModal}
+                />
+              )}
             </div>
           </Col>
         </Row>
