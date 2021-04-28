@@ -16,7 +16,8 @@ function handleMenuClick(e) {
 }
 
 export default function RouteGeneral(props) {
-  const [plan, setPlan] = useState();
+  console.log("plan-route", props.plan);
+  const [plan, setPlan] = useState(props.plan);
   const [RouteD, setDeliveries] = useState([]);
   const [visible, setVisible] = useState(false);
   const idUser = props.idUser;
