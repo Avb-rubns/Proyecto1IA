@@ -7,13 +7,16 @@ const { Text } = Typography;
 const deleteDelivery = async (ids) => {
   try {
     console.log(ids);
-    const result = await fetch("http://localhost:3000/api/planDeliveries", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ids }),
-    }).then((res) => res.json());
+    const result = await fetch(
+      "http://localhost:3000/api/planDeliveries/?idUser=RIPEJPBQWV",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids }),
+      }
+    ).then((res) => res.json());
     console.log(result);
   } catch (error) {
     console.log(error);
@@ -33,7 +36,7 @@ export function Delivery(props) {
             <Text>{props.destination_addresses}</Text>
           </div>
           <div className={styles["container-btn-delivery"]}>
-            <Button type="text" icon={<EditOutlined />} />
+            {/*<Button type="text" icon={<EditOutlined />} />*/}
             <Button
               type="text"
               onClick={() =>
