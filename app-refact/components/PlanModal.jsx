@@ -17,7 +17,7 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 const { Title } = Typography;
 
 export default function PlanModal(props) {
-  const [iduser, setID] = useState(props.iduser);
+  const [iduser, setID] = useState(props.idUser);
   const onKeyPressEvent = (event) => {
     const keyCode = event.keyCode || event.which;
     const keyValue = String.fromCharCode(keyCode);
@@ -265,7 +265,7 @@ export default function PlanModal(props) {
                   </Title>
                 </div>
                 <Divider style={{ margin: 0, padding: 0 }} />
-                <DeliveryList deliveries={listDeliveries} />
+                <DeliveryList idUser={iduser} deliveries={listDeliveries} />
               </Row>
             </Col>
           </Row>

@@ -1,10 +1,13 @@
 import { Delivery } from "./Delivery";
 
-export function DeliveryList({ deliveries }) {
+export function DeliveryList(props) {
+  console.log(props.idUser);
   return (
     <>
-      {deliveries &&
-        deliveries.map((delivery, i) => <Delivery key={i} {...delivery} />)}
+      {props.deliveries &&
+        props.deliveries.map((delivery, i) => (
+          <Delivery idUser={props.idUser} key={i} {...delivery} />
+        ))}
     </>
   );
 }
