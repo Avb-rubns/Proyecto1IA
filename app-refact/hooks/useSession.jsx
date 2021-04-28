@@ -1,8 +1,9 @@
-import { useCallback, useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Context from "../context/sessionContext";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 
 export default function useSession() {
+  const [loading, setLoading] = useState(true);
   const { token, setToken } = useContext(Context);
 
   useEffect(() => {
@@ -37,18 +38,20 @@ export default function useSession() {
     [setToken]
   );
 
-  const logOut = useCallback(() => {
+  const logOut = () => {
     try {
       destroyCookie(null, "token");
       setToken(null);
     } catch (error) {
       console.log("Error:" + error);
     }
-  }, []);
+  };
 
   return {
     isLogged: Boolean(token),
     login,
     logOut,
+    loading,
+    setLoading,
   };
 }
