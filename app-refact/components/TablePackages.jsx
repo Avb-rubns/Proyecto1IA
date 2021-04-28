@@ -22,7 +22,7 @@ const columns = [
 
 export default function TablePackages(props) {
   const [idUser, setID] = useState(props.idUser);
-  const [data, setData] = useState({});
+  const [dataTable, setDataT] = useState([]);
   useEffect(async () => {
     await getPackages(idUser);
   }, []);
@@ -32,7 +32,7 @@ export default function TablePackages(props) {
       "http://localhost:3000/api/user/?option=false&iduser=" + idUser
     ).then((res) => res.json());
     console.log(result.data);
-    setData(result.data);
+    setDataT(result.data);
   };
 
   function handleMenuClick(e) {
@@ -68,7 +68,7 @@ export default function TablePackages(props) {
         <Table
           style={{ padding: "1rem 4rem" }}
           pagination={{ position: ["bottomCenter"] }}
-          dataSource={data}
+          dataSource={dataTable}
           columns={columns}
         />
       </div>
