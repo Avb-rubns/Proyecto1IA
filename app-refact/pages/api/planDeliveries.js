@@ -11,24 +11,23 @@ export default async function handler(req, res) {
   switch (req.method) {
     case "POST":
       try {
+        const { iduser } = req.query;
         const { entrega } = req.body;
         let des = textF.createDirection(entrega);
         des = textF.cleanString(des);
         const id = textF.createID(entrega);
+        const userDir = await serviceMongo.getDicUser(iduser);
+        const point_origin = textF.createDirection(userDir);
 
-        /* Pasar la direccion del usuario */
-        let POINT_ORIGIN =
-          "Av+Don+Juande+Palafox+y+Mendoza+Centro+72000+Puebla+Pue";
-
-        const info = await serviceMaps.getInfo(POINT_ORIGIN, des);
+        const info = await serviceMaps.getInfo(point_origin, des);
 
         const delivery = textF.createDelivery(info, id, entrega);
         if (entrega.idUser != "") {
           const register = true;
-          await serviceMongo.insertDelivery(delivery, "", register);
+          await serviceMongo.insertDelivery(delivery, iduser, register);
         } else {
           const register = false;
-          await serviceMongo.insertDelivery(delivery, "", register);
+          await serviceMongo.insertDelivery(delivery, iduser, register);
         }
         res.status(200).send(delivery);
         serviceMongo.close();
@@ -42,7 +41,7 @@ export default async function handler(req, res) {
 
     case "DELETE":
       try {
-        const { idUser } = req.query;
+        const { iduser } = req.query;
         const { idDelivery } = req.body;
         const r = await serviceMongo.deleteDelivery(idDelivery, idUser);
         res.status(200).send({ r });
