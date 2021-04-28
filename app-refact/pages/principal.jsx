@@ -28,8 +28,8 @@ export default function Principal() {
       router.push("/login");
     }
   }, [isLogged]);
-  useEffect(() => {
-    //getInfoUser(token);
+  useEffect(async () => {
+    await getInfoUser(token);
   }, []);
 
   const exit = async () => {
@@ -107,7 +107,7 @@ export default function Principal() {
           {/* Main */}
           <Col span={20}>
             <div className={styles["container-main"]}>
-              {visibleTable && <TablePackages data={{}} />}
+              {visibleTable && <TablePackages idUser={info.idUser} />}
               {visibleRoute && (
                 <RouteGeneral
                   idUser={info.idUser}
