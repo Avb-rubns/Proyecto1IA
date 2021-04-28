@@ -1,5 +1,6 @@
 import { Table, Button, Dropdown, Menu } from "antd";
 import { RightOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 
 const columns = [
   {
@@ -20,8 +21,20 @@ const columns = [
 ];
 
 export default function TablePackages(props) {
-  //const data = props.data;
-  console.log();
+  const [idUser, setID] = useState(props.idUser);
+  const [data, setData] = useState({});
+  useEffect(async () => {
+    await getPackages(idUser);
+  }, []);
+
+  const getPackages = async (idUser) => {
+    const result = await fetch(
+      "http://localhost:3000/api/user/?option=false&iduser=" + idUser
+    ).then((res) => res.json());
+    console.log(result.data);
+    setData(result.data);
+  };
+
   function handleMenuClick(e) {
     console.log("click", e);
     if (e.key == 1) {
@@ -55,7 +68,7 @@ export default function TablePackages(props) {
         <Table
           style={{ padding: "1rem 4rem" }}
           pagination={{ position: ["bottomCenter"] }}
-          dataSource={null}
+          dataSource={data}
           columns={columns}
         />
       </div>
