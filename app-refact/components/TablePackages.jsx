@@ -32,7 +32,6 @@ export default function TablePackages(props) {
     const result = await fetch(
       "http://localhost:3000/api/user/?option=2&iduser=" + idUser
     ).then((res) => res.json());
-    console.log(result.data2);
     setDataT(result.data2);
     setDataAux(result.data2);
   };
@@ -42,7 +41,6 @@ export default function TablePackages(props) {
     console.log("holi");
     for (let index = 0; index < dataTable.length; index++) {
       if (dataTable[index].state == "Recibido") {
-        console.log(dataTable[index].state);
         result.push(dataTable[index]);
       }
     }
@@ -53,7 +51,6 @@ export default function TablePackages(props) {
     let result = [];
     for (let index = 0; index < dataTable.length; index++) {
       if (dataTable[index].state == "En camino") {
-        console.log(dataTable[index].state);
         result.push(dataTable[index]);
       }
     }
