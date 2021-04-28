@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import PlanModal from "../components/PlanModal";
 import useModal from "../hooks/useModal";
 import styles from "../styles/Principal.module.css";
-import { Row, Col, Menu } from "antd";
+import { Row, Col, Menu, Popconfirm, message } from "antd";
 import { CodepenOutlined, SendOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import useSession from "../hooks/useSession";
@@ -15,7 +15,7 @@ import { parseCookies } from "nookies";
 export default function Principal() {
   const { visible, showModal, handleCancel } = useModal();
   const [plan, setPlan] = useState(false);
-  const [visibleRoute, setVisibleR] = useState(false);
+  const [visibleRoute, setVisibleR] = useState(true);
   const [visibleTable, setVisibleT] = useState(false);
 
   const { isLogged, logOut } = useSession();
@@ -25,7 +25,7 @@ export default function Principal() {
 
   useEffect(() => {
     if (!isLogged) {
-      router.push("/login");
+      router.replace("/login");
     }
   }, [isLogged]);
   useEffect(async () => {
@@ -41,7 +41,7 @@ export default function Principal() {
       body: JSON.stringify({ idUser: info.idUser, token: token }),
     }).then((res) => res.json());
     logOut();
-    router.push("/login");
+    router.replace("/login");
   };
 
   const getInfoUser = async (token) => {
@@ -53,7 +53,6 @@ export default function Principal() {
   };
 
   const handleClick = (e) => {
-    console.log("click ", e.key);
     switch (e.key) {
       case "1":
         console.log("Logistica");
@@ -110,6 +109,7 @@ export default function Principal() {
                 <RouteGeneral
                   idUser={info.idUser}
                   plan={info.plan}
+                  route={info.route}
                   showModal={showModal}
                 />
               )}
@@ -123,7 +123,7 @@ export default function Principal() {
           showModal={showModal}
           handleCancel={handleCancel}
           title={"Crear Entregas"}
-          iduser={info.idUser}
+          idUser={info.idUser}
         />
       )}
     </Template>

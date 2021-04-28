@@ -1,5 +1,14 @@
-import { PageHeader, Button, Dropdown, Menu, Row, Col } from "antd";
-import { useState } from "react";
+import {
+  PageHeader,
+  Button,
+  Dropdown,
+  Menu,
+  Row,
+  Col,
+  message,
+  Popconfirm,
+} from "antd";
+import { useEffect, useState } from "react";
 import styles from "../styles/PlanModal.module.css";
 import { RouteDeliveries } from "./RouteDeliveries";
 
@@ -11,37 +20,46 @@ let dateTime = date;
 let numDeliveries = NaN;
 let distance = "0 km";
 let duration = "0 min";
-function handleMenuClick(e) {
-  console.log("click", e);
-}
 
 export default function RouteGeneral(props) {
-  console.log("plan-route", props.plan);
   const [plan, setPlan] = useState(props.plan);
   const [RouteD, setDeliveries] = useState([]);
   const [visible, setVisible] = useState(false);
-  const idUser = props.idUser;
-  //setPlan(props.plan);
+  const [iduser, setID] = useState(props.idUser);
+  const [route, setRoute] = useState(props.route);
+
+  const text =
+    "Si ingresa nuevos paquetes, cuando tiene una ruta planeada esta se cancelara,¿Desea continuar?";
+
+  function handleMenuClick(e) {
+    console.log("click", e);
+  }
+
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item danger onClick={canceleRoute}>
-        Cancelar Ruta
-      </Menu.Item>
-      <Menu.Item danger onClick={props.delete}>
-        Cancelar Entrega
-      </Menu.Item>
+      <Menu.Item danger>Cancelar Ruta</Menu.Item>
+      <Menu.Item danger>Cancelar Entrega</Menu.Item>
     </Menu>
   );
 
+  useEffect(async () => {
+    if (plan) {
+      console.log("plan", plan);
+      await getRoute();
+    }
+  }, []);
+
+  const verifi = () => {};
   const getRoute = async () => {
     try {
       const result = await fetch(
-        "http://localhost:3000/api/planDeliveries/?idUser=RIPEJPBQWV"
+        "http://localhost:3000/api/planDeliveries/?idUser=" + iduser
       ).then((res) => res.json());
       numDeliveries = result.route.length;
       distance = result.distance;
       duration = result.duration;
       setVisible(true);
+      setPlan(true);
       setDeliveries(result.route);
     } catch (error) {
       console.log(error);
@@ -65,7 +83,7 @@ export default function RouteGeneral(props) {
     <>
       <PageHeader
         ghost={false}
-        title={"Ruta de entrega: " + dateTime}
+        title={"Logistica de Ruta: " + dateTime}
         extra={[
           <Button type="primary" onClick={getRoute}>
             Iniciar Entregas
@@ -73,20 +91,27 @@ export default function RouteGeneral(props) {
           <Dropdown overlay={menu} placement="bottomLeft">
             <Button danger>Cancelar</Button>
           </Dropdown>,
-          <Button onClick={props.showModal}>Planear Ruta</Button>,
+          <Popconfirm
+            title={text}
+            onConfirm={props.showModal}
+            okText="Si"
+            cancelText="No"
+            placement="bottomRight"
+          >
+            <Button>Ingreasar Entregas</Button>
+          </Popconfirm>,
         ]}
       ></PageHeader>
-
-      {visible && (
+      {plan && (
         <div>
           <div className={styles["div-route"]}>
             <div>
               <strong>Tiempo aproximado de ruta</strong>
-              <p>{duration}</p>
+              <p>{duration ? duration : "Cargando"}</p>
             </div>
             <div>
               <strong>Distancia a recorrer</strong>
-              <p>{distance}</p>
+              <p>{distance ? distance : "Cargando"}</p>
             </div>
           </div>
         </div>
@@ -97,13 +122,13 @@ export default function RouteGeneral(props) {
           width: "100%",
         }}
       >
-        {visible && (
+        {plan && (
           <div className={styles["div-map-de"]}>
             <Col span={19}></Col>
             <Col span={5}>
               <div className={styles["container-btn-form"]}>
                 <strong>Entregas</strong>
-                <p>{numDeliveries}</p>
+                <p>{numDeliveries ? numDeliveries : "Cargando"}</p>
               </div>
               {RouteD && <RouteDeliveries deliveries={RouteD} />}
             </Col>
