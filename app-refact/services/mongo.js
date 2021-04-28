@@ -87,7 +87,7 @@ export class MongoDBService {
   async insertDelivery(delivery, user, register) {
     try {
       let result = NaN;
-      const data = await User.findOne({ email: "prueba@mail.com" });
+      const data = await User.findOne({ idUser: user });
       const newDelivery = new Delivery({ ...delivery });
       if (register) {
         const dataC = await User.findOne({ idUser: delivery.idUser });
@@ -110,11 +110,11 @@ export class MongoDBService {
     try {
       //console.log(ids);
       let result = NaN;
-      const dataOld = await User.findOne({ email: "prueba@mail.com" });
+      const dataOld = await User.findOne({ idUser: user });
       //console.log(dataOld);
-      if (ids.idUser != "") {
+      if (ids.idUser !== "") {
         await User.updateOne(
-          { email: "prueba@mail.com" },
+          { idUser: user },
           { $pull: { route: { idDelivery: ids.idDelivery } } }
         );
         await User.updateOne(
@@ -123,7 +123,7 @@ export class MongoDBService {
         );
       } else {
         await User.updateOne(
-          { email: "prueba@mail.com" },
+          { idUser: user },
           { $pull: { route: { idDelivery: ids.idDelivery } } }
         );
         await ListDelyveries.updateOne(
@@ -131,7 +131,7 @@ export class MongoDBService {
           { $pull: { deliveries: { idDelivery: ids.idDelivery } } }
         );
       }
-      const dataU = await User.findOne({ email: "prueba@mail.com" });
+      const dataU = await User.findOne({ idUser: user });
       if (dataOld.route === dataU.route) {
         result = "Ocurrio un error al eliminar la entrega";
       } else {
@@ -181,7 +181,6 @@ export class MongoDBService {
       console.log(idUser);
       const data = await User.findOne({ idUser: idUser });
       result = Object.assign(data.otw ?? {}, data.received ?? {});
-      console.log("result getPackages:", result);
       return result;
     } catch (error) {
       console.log(error);
