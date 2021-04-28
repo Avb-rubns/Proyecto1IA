@@ -12,20 +12,25 @@ export default async function handler(req, res) {
       try {
         const { sesion } = req.body;
         const data = await service.login(sesion);
-        console.log(data);
-        if (data.msj == "Error L001" || data == null) {
-          res.status(404).send({ resp: "El usuario no esta registrado" });
-          service.close();
-        } else {
+        console.log("Login", data);
+        if (data !== null) {
+          console.log("Login- entre", data);
           if (await auth.validate(data, sesion)) {
             let token = uuidv4();
             await service.setToken(data.idUser, token.toString());
             res.status(200).send({ token });
             service.close();
           } else {
-            res.status(403).send({ resp: "Contraseña o Correo erroneos" });
+            res
+              .status(403)
+              .send({ token: "", msj: "Contraseña o Correo erroneos" });
             service.close();
           }
+        } else {
+          res
+            .status(404)
+            .send({ token: "", mjs: "El usuario no esta registrado" });
+          service.close();
         }
       } catch (error) {
         res.status(403).send({ resp: "Error-U-Auth" });

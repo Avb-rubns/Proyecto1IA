@@ -30,7 +30,8 @@ export default function Login() {
     setForm({ ...sesion, [name]: value });
   };
   const Sumit = async () => {
-    login({ sesion });
+    const result = await login({ sesion });
+    console.log("Summit ", result);
   };
 
   return (

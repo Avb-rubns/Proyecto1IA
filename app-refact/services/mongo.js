@@ -57,6 +57,7 @@ export class MongoDBService {
       be = await User.findOne({
         email: form.email,
       });
+      console.log("Login-Mongo", be);
       return be;
     } catch (error) {
       console.log(error);

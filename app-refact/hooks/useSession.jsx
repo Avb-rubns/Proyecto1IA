@@ -21,13 +21,16 @@ export default function useSession() {
         },
         body: JSON.stringify({ sesion }),
       }).then((res) => res.json());
-
-      if (token != "") {
+      console.log("usesesion", result);
+      if (result.token !== "") {
         setCookie(null, "token", result.token, {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
         });
         setToken(result);
+        return true;
+      } else {
+        return false;
       }
     } catch (error) {
       console.log("Error:" + error);

@@ -29,7 +29,7 @@ export default function Principal() {
     }
   }, [isLogged]);
   useEffect(() => {
-    getInfoUser(token);
+    //getInfoUser(token);
   }, []);
 
   const exit = async () => {
