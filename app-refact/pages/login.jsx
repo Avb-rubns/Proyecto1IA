@@ -21,8 +21,9 @@ export default function Login() {
   const router = useRouter();
   useEffect(() => {
     if (isLogged) {
-      router.push("/principal");
+      router.replace("/principal");
     }
+    console.log("Login: statusLogged - ", isLogged);
   }, [isLogged]);
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -31,6 +32,7 @@ export default function Login() {
   const Sumit = async () => {
     login({ sesion });
   };
+
   return (
     <Template title="Acceso">
       <div className={styles["container-main"]}>
