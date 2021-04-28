@@ -1,6 +1,5 @@
 import { Table, Button, Dropdown, Menu } from "antd";
 import { RightOutlined } from "@ant-design/icons";
-import { useEffect } from "react";
 
 const columns = [
   {
@@ -21,7 +20,7 @@ const columns = [
 ];
 
 export default function TablePackages(props) {
-  const data = props.data;
+  //const data = props.data;
   console.log();
   function handleMenuClick(e) {
     console.log("click", e);
@@ -56,7 +55,7 @@ export default function TablePackages(props) {
         <Table
           style={{ padding: "1rem 4rem" }}
           pagination={{ position: ["bottomCenter"] }}
-          dataSource={data}
+          dataSource={null}
           columns={columns}
         />
       </div>

@@ -20,7 +20,7 @@ export default function Principal() {
 
   const { isLogged, logOut } = useSession();
   const router = useRouter();
-  const [info, setInfo] = useState(null);
+  const [info, setInfo] = useState({});
   const { token } = parseCookies();
 
   useEffect(() => {
@@ -30,7 +30,6 @@ export default function Principal() {
   }, [isLogged]);
   useEffect(() => {
     getInfoUser(token);
-    console.log(info.username);
   }, []);
 
   const exit = async () => {
