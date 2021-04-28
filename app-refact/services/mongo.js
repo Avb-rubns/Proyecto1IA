@@ -180,7 +180,7 @@ export class MongoDBService {
       return result;
     } catch (error) {
       console.log(error);
-      return { msj: "Error al obtener Route" };
+      return { msj: "Error al obtener Historial de paquetes" };
     }
   }
   /**
@@ -193,8 +193,7 @@ export class MongoDBService {
     try {
       const user = { idUser: idUser };
       const update = { route: Route };
-      const data = await User.findOneAndUpdate(user, update);
-      //console.log(data);
+      await User.findOneAndUpdate(user, update);
     } catch (error) {
       console.log("ERROR-UPDATE-MONGO:" + error);
     }
@@ -238,6 +237,60 @@ export class MongoDBService {
       //console.log(data);
     } catch (error) {
       console.log("ERROR" + error);
+    }
+  }
+
+  async getPlan(idUser) {
+    try {
+      let result = NaN;
+      const data = await User.findOne({ idUser: idUser });
+      let plan = data.plan;
+      if (plan) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return { msj: "Error al obtener Route" };
+    }
+  }
+
+  async updatePlan(idUser) {
+    try {
+      const user = { idUser: idUser };
+      const update = { plan: "true" };
+      const result = await User.findOneAndUpdate(user, update);
+      return result;
+    } catch (error) {
+      console.log("ERROR-UPDATEPLAN-MONGO:" + error);
+      return { msj: "Error update plan" };
+    }
+  }
+
+  async getInfoPackage(idDe) {
+    try {
+      const data = await ListDelyveries.findOne({ id: "general" });
+      let index = data.deliveries.findIndex(
+        (delivery) => delivery.idDelivery === idDe
+      );
+      console.log(data.deliveries[index]);
+      return data.deliveries[index];
+    } catch (error) {
+      console.log("ERROR-INVITE-MONGO:" + error);
+      return "Error-GETIFO_PACKAGE";
+    }
+  }
+
+  async deleteToken(idUser, token) {
+    try {
+      const user = { idUser: idUser };
+      const update = { token: "" };
+      await User.findOneAndUpdate(user, update);
+      return;
+    } catch (error) {
+      console.log("ERROR-DELETE-MONGO:" + error);
+      return "Error-DELEYE-TOKEN";
     }
   }
 }

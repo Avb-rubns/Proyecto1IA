@@ -311,15 +311,16 @@ export class formatText {
 
   infoUser(data) {
     let res = {
+      plan: data.plan,
       username: data.username,
       lastname: data.lastname,
       address: data.address,
       colonia: data.colonia,
       numhouse: data.numhouse,
       postalcode: data.postalcode,
+      route: data.route,
       city: data.city,
       state: data.state,
-      route: data.route,
     };
     return res;
   }
