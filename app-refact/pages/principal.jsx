@@ -46,7 +46,7 @@ export default function Principal() {
 
   const getInfoUser = async (token) => {
     const result = await fetch(
-      "http://localhost:3000/api/user/?option=true&token=" + token
+      "http://localhost:3000/api/user/?option=1&token=" + token
     ).then((res) => res.json());
     setInfo(result.user);
     console.log(info);

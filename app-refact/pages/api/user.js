@@ -43,22 +43,36 @@ export default async function handler(req, res) {
       try {
         const { iduser, option, token } = req.query;
         console.log("iduser: ", iduser, "option: ", option, "token: ", token);
-        console.log("option: ", !option);
-        if (option == "false") {
-          console.log("idUser: ", iduser);
-          console.log("option: ", option);
-          const info = await service.getPackages(iduser);
-          const data = formt.cretalistTable(info);
-          res.status(200).send({ data });
-          service.close();
-        } else {
-          console.log("option: ", option);
-          console.log("token: ", token);
-          const info = await service.getInfo(token);
-          console.log(info);
-          const user = formt.infoUser(info);
-          res.status(200).send({ user });
-          service.close();
+        switch (option) {
+          case "1":
+            console.log("option: ", option);
+            console.log("token: ", token);
+            let info1 = await service.getInfo(token);
+            console.log(info1);
+            const user = formt.infoUser(info1);
+            res.status(200).send({ user });
+            service.close();
+            break;
+          case "2":
+            console.log("idUser: ", iduser);
+            console.log("option: ", option);
+            let info2 = await service.getPackages(iduser);
+            const data2 = formt.cretalistTable(info2);
+            res.status(200).send({ data2 });
+            service.close();
+            break;
+          case "3":
+            console.log("idUser: ", iduser);
+            console.log("option: ", option);
+            let info3 = await service.getPackagesR(iduser);
+            const data3 = formt.cretalistTable(info3);
+            res.status(200).send({ data3 });
+            service.close();
+
+          default:
+            console.log("Error-Get: " + error);
+            res.status(403).send({ resp: "Error-02" });
+            break;
         }
       } catch (error) {
         console.log("Error-Get: " + error);
