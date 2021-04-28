@@ -42,8 +42,9 @@ export default async function handler(req, res) {
 
     case "DELETE":
       try {
-        const { ids } = req.body;
-        const r = await serviceMongo.deleteDelivery(ids, "");
+        const { idUser } = req.query;
+        const { idDelivery } = req.body;
+        const r = await serviceMongo.deleteDelivery(idDelivery, idUser);
         res.status(200).send({ r });
         serviceMongo.close();
       } catch (error) {
@@ -55,47 +56,59 @@ export default async function handler(req, res) {
     case "GET":
       try {
         const { idUser } = req.query;
-        const route = await serviceMongo.getRoute(idUser);
-        const dir = await serviceMongo.getDicUser(idUser);
+        const plan = await serviceMongo.getPlan(idUser);
+        if (!plan) {
+          const route = await serviceMongo.getRoute(idUser);
+          let info = textF.getInfo(route);
+          res
+            .status(200)
+            .send({ route: RoutePlan, distance: info.dis, duration: info.dur });
+          serviceMongo.close();
+        } else {
+          const route = await serviceMongo.getRoute(idUser);
 
-        const originUser = textF.createDirection(dir);
-        const cleanOrigin = textF.cleanString(originUser);
+          const dir = await serviceMongo.getDicUser(idUser);
 
-        let map = textF.createTable(cleanOrigin, route);
+          const originUser = textF.createDirection(dir);
+          const cleanOrigin = textF.cleanString(originUser);
 
-        for (let [clave, _] of map) {
-          let key = String(clave);
-          let points = key.split("-");
+          let map = textF.createTable(cleanOrigin, route);
 
-          let res = await serviceMaps.getInfo(points[0], points[1]);
-          let distance = res.rows[0].elements[0].distance.text;
-          let duration = res.rows[0].elements[0].duration.text;
-          let addressDes = res.destination_addresses[0];
-          let addressOri = res.origin_addresses[0];
-          map.set(clave, [distance, duration, addressDes, addressOri]);
+          for (let [clave, _] of map) {
+            let key = String(clave);
+            let points = key.split("-");
+
+            let res = await serviceMaps.getInfo(points[0], points[1]);
+            let distance = res.rows[0].elements[0].distance.text;
+            let duration = res.rows[0].elements[0].duration.text;
+            let addressDes = res.destination_addresses[0];
+            let addressOri = res.origin_addresses[0];
+            map.set(clave, [distance, duration, addressDes, addressOri]);
+          }
+
+          //console.log(map);
+          const g = new GraphD();
+          const graph = g.createG(map);
+
+          //console.log(graph);
+          const minimumSpanningTree = prim(graph);
+          //console.log(minimumSpanningTree.toString());
+          let orden = minimumSpanningTree.toString();
+          const RoutePlan = textF.createOrden(orden, map, route);
+          await serviceMongo.updateDeliveries(idUser, RoutePlan);
+          for (let index = 0; index < RoutePlan.length; index++) {
+            await serviceMongo.updateOTW(
+              RoutePlan[index].idUser ?? "",
+              RoutePlan[index].idDelivery
+            );
+          }
+          await serviceMongo.updatePlan(idUser);
+          let info = textF.getInfo(RoutePlan);
+          res
+            .status(200)
+            .send({ route: RoutePlan, distance: info.dis, duration: info.dur });
+          serviceMongo.close();
         }
-
-        //console.log(map);
-        const g = new GraphD();
-        const graph = g.createG(map);
-
-        //console.log(graph);
-        const minimumSpanningTree = prim(graph);
-        //console.log(minimumSpanningTree.toString());
-        let orden = minimumSpanningTree.toString();
-        const RoutePlan = textF.createOrden(orden, map, route);
-        await serviceMongo.updateDeliveries(idUser, RoutePlan);
-        for (let index = 0; index < RoutePlan.length; index++) {
-          await serviceMongo.updateOTW(
-            RoutePlan[index].idUser ?? "",
-            RoutePlan[index].idDelivery
-          );
-        }
-        let info = textF.getInfo(RoutePlan);
-        res
-          .status(200)
-          .send({ route: RoutePlan, distance: info.dis, duration: info.dur });
-        serviceMongo.close();
       } catch (error) {
         console.log("ERRO-PL-02" + error);
         res.status(404).send({ MSJ: "ERRO-PL-G" });
