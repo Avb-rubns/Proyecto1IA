@@ -301,8 +301,10 @@ export class formatText {
       let aux = {
         key: (index + 1).toString(),
         package: data[index].idDelivery,
-        state: data[index].state ?? "",
-        date: data[index].date ?? "",
+        state: data[index].state
+          ? data[index].state
+          : "Aun no se ha despachado",
+        date: data[index].date ? data[index].date : "",
       };
       list.push(aux);
     }
@@ -321,6 +323,7 @@ export class formatText {
       route: data.route,
       city: data.city,
       state: data.state,
+      idUser: data.idUser,
     };
     return res;
   }
