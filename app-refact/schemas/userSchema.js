@@ -16,7 +16,7 @@ const userSchema = new Schema(
     postalcode: String,
     city: String,
     state: String,
-    plan: String,
+    plan: Boolean,
     route: [
       {
         idDelivery: String,

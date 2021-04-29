@@ -14,7 +14,6 @@ import { parseCookies } from "nookies";
 
 export default function Principal() {
   const { visible, showModal, handleCancel } = useModal();
-  const [plan, setPlan] = useState(false);
   const [visibleRoute, setVisibleR] = useState(true);
   const [visibleTable, setVisibleT] = useState(false);
 
@@ -33,7 +32,7 @@ export default function Principal() {
   }, []);
 
   const exit = async () => {
-    await fetch("http://localhost:3000/api/user/", {
+    await fetch("http://localhost:3000/api/user/?option=1", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +48,7 @@ export default function Principal() {
       "http://localhost:3000/api/user/?option=1&token=" + token
     ).then((res) => res.json());
     setInfo(result.user);
-    setPlan(result.user.plan);
+    console.log(result.user);
   };
 
   const handleClick = (e) => {
@@ -107,10 +106,9 @@ export default function Principal() {
               {visibleTable && <TablePackages idUser={info.idUser} />}
               {visibleRoute && (
                 <RouteGeneral
-                  idUser={info.idUser}
-                  plan={info.plan}
-                  route={info.route}
+                  info={info}
                   showModal={showModal}
+                  setInfo={setInfo}
                 />
               )}
             </div>

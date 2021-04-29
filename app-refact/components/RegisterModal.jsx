@@ -25,7 +25,7 @@ export default function RegisterModal(props) {
     city: "",
     state: "",
     token: "",
-    plan: "",
+    plan: false,
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
