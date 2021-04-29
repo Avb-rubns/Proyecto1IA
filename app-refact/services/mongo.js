@@ -234,13 +234,13 @@ export class MongoDBService {
           {
             $pull: {
               deliveries: {
-                idDelivery: idDelivery,
-                state: "En camino",
+                idDelivery: Delivery.idDelivery,
+                state: Delivery.state,
               },
             },
           }
         );
-        data.deliveries[index].state = "En camino";
+        data.deliveries[index].state = Delivery.state;
         await data.save();
       }
       //console.log(data);
@@ -265,10 +265,10 @@ export class MongoDBService {
     }
   }
 
-  async updatePlan(idUser) {
+  async updatePlan(idUser, newPlan) {
     try {
       const user = { idUser: idUser };
-      const update = { plan: "true" };
+      const update = { plan: newPlan };
       const result = await User.findOneAndUpdate(user, update);
       return result;
     } catch (error) {

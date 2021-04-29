@@ -103,7 +103,7 @@ export default async function handler(req, res) {
               RoutePlan[index]
             );
           }
-          await serviceMongo.updatePlan(idUser);
+          await serviceMongo.updatePlan(idUser, true);
           let info = textF.getInfo(RoutePlan);
           res
             .status(200)

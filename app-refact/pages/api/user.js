@@ -82,7 +82,7 @@ export default async function handler(req, res) {
       break;
 
     case "DELETE":
-      const { option } = req.query;
+      const { option, iduser } = req.query;
       const { idUser, token } = req.body;
       try {
         switch (option) {
@@ -93,9 +93,15 @@ export default async function handler(req, res) {
             res.status(200).send({ result });
             break;
           case "2":
-            console.log("iduser: ", idUser);
-            const route = await service.getRoute(idUser);
+            console.log("iduser: ", iduser);
+            const route = await service.getRoute(iduser);
             console.log(route);
+            for (let index = 0; index < route.length; index++) {
+              route[index].state = "Cancelado";
+              await service.updateOTW(route[index].idUser, route[index]);
+            }
+            await service.updateDeliveries(iduser, []);
+            await service.updatePlan(iduser, false);
             res.status(200).send({ msj: "se cancelo todo" });
 
             break;

@@ -1,4 +1,5 @@
 import { PageHeader, Button, Row, Col, Popconfirm } from "antd";
+import { route } from "next/dist/next-server/server/router";
 import { useEffect, useState } from "react";
 import styles from "../styles/PlanModal.module.css";
 import { RouteDeliveries } from "./RouteDeliveries";
@@ -14,7 +15,6 @@ let duration = "0 min";
 
 export default function RouteGeneral({ info, showModal, setInfo }) {
   const [RouteD, setDeliveries] = useState(info.route);
-
   const text =
     "Si ingresa nuevos paquetes," +
     "\n" +
@@ -22,25 +22,9 @@ export default function RouteGeneral({ info, showModal, setInfo }) {
     "\n" +
     "¿Desea continuar?";
 
-  function handleMenuClick(e) {
-    console.log("click", e);
-    switch (e.key) {
-      case "1":
-        //cancelar ruta
-        break;
-      case "2":
-        //cancelar entrega
-        break;
-      default:
-        console.log("ni idea");
-        break;
-    }
-  }
-
   useEffect(async () => {
     if (info.plan) {
       console.log("plan", info.plan);
-      initMap();
       await getRoute();
     }
   }, []);
@@ -60,14 +44,17 @@ export default function RouteGeneral({ info, showModal, setInfo }) {
   };
   const canceleRoute = async () => {
     try {
-      const result = await fetch("http://localhost:3000/api/user/?option=2", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idUser: iduser }),
-      }).then((res) => res.json());
-      console.log(result);
+      const result = await fetch(
+        "http://localhost:3000/api/user/?option=2&iduser=" + info.idUser,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+        }
+      ).then((res) => res.json());
+      router.reload();
     } catch (error) {
       console.log(error);
     }
@@ -115,7 +102,9 @@ export default function RouteGeneral({ info, showModal, setInfo }) {
                 <strong>Entregas</strong>
                 <p>{info.route ? info.route.length : 0}</p>
               </div>
-              {info.route && <RouteDeliveries deliveries={info.route} />}
+              {info.route && (
+                <RouteDeliveries deliveries={info.route ? info.route : []} />
+              )}
             </Col>
           </div>
         </div>
