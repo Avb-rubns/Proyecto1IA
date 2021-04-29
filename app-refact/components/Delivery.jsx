@@ -8,12 +8,9 @@ const { Text } = Typography;
 
 export function Delivery(props) {
   const { token } = parseCookies();
-  const [iduser, setId] = useState(props.idUser);
-  console.log("iduser: ", token);
 
   const deleteDelivery = async (delivery) => {
     try {
-      console.log(delivery);
       const result = await fetch(
         "http://localhost:3000/api/planDeliveries/?token=" + token,
         {
@@ -25,6 +22,13 @@ export function Delivery(props) {
         }
       ).then((res) => res.json());
       console.log(result);
+      for (var i = 0; i < props.listDeliveries.length; i++) {
+        if (props.listDeliveries[i].idDelivery === delivery.idDelivery) {
+          props.listDeliveries.splice(i, 1);
+        }
+      }
+      console.log(props.listDeliveries)
+      props.setDeliveries(props.listDeliveries);
     } catch (error) {
       console.log(error);
     }
