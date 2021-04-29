@@ -265,7 +265,11 @@ export default function PlanModal(props) {
                   </Title>
                 </div>
                 <Divider style={{ margin: 0, padding: 0 }} />
-                <DeliveryList idUser={iduser} deliveries={listDeliveries} />
+                <DeliveryList
+                  setDeliveries={setDeliveries}
+                  listDeliveries={listDeliveries}
+                  deliveries={listDeliveries}
+                />
               </Row>
             </Col>
           </Row>
