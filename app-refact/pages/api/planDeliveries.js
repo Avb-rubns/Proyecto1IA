@@ -100,7 +100,7 @@ export default async function handler(req, res) {
           for (let index = 0; index < RoutePlan.length; index++) {
             await serviceMongo.updateOTW(
               RoutePlan[index].idUser ?? "",
-              RoutePlan[index].idDelivery
+              RoutePlan[index]
             );
           }
           await serviceMongo.updatePlan(idUser);

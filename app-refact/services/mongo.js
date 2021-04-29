@@ -203,26 +203,31 @@ export class MongoDBService {
     }
   }
 
-  async updateOTW(idUser, idDelivery) {
+  async updateOTW(idUser, Delivery) {
     try {
       if (idUser !== "") {
         const user = { idUser: idUser };
         const data = await User.findOne(user);
         await User.updateOne(
           { user },
-          { $pull: { otw: { idDelivery: idDelivery }, state: "En camino" } }
+          {
+            $pull: {
+              otw: { idDelivery: Delivery.idDelivery },
+              state: Delivery.state,
+            },
+          }
         );
         let index = data.otw.findIndex(
-          (delivery) => delivery.idDelivery === idDelivery
+          (delivery) => delivery.idDelivery === Delivery.idDelivery
         );
-        data.otw[index].state = "En camino";
+        data.otw[index].state = Delivery.state;
         data.save();
       } else {
         const data = await ListDelyveries.findOne({ id: "general" });
         //console.log(data);
 
         let index = data.deliveries.findIndex(
-          (delivery) => delivery.idDelivery === idDelivery
+          (delivery) => delivery.idDelivery === Delivery.idDelivery
         );
         await ListDelyveries.updateOne(
           { id: "general" },

@@ -82,12 +82,27 @@ export default async function handler(req, res) {
       break;
 
     case "DELETE":
+      const { option } = req.query;
+      const { idUser, token } = req.body;
       try {
-        const { idUser, token } = req.body;
-        console.log(token, idUser);
-        const result = await service.deleteToken(idUser, token);
-        service.close();
-        res.status(200).send({ result });
+        switch (option) {
+          case "1":
+            console.log(token, idUser);
+            const result = await service.deleteToken(idUser, token);
+            service.close();
+            res.status(200).send({ result });
+            break;
+          case "2":
+            console.log("iduser: ", idUser);
+            const route = await service.getRoute(idUser);
+            console.log(route);
+            res.status(200).send({ msj: "se cancelo todo" });
+
+            break;
+
+          default:
+            break;
+        }
       } catch (error) {
         res.status(404).send({ msj: "Error" });
         service.close();
