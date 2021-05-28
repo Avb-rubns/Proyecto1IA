@@ -34,16 +34,14 @@ export class MongoDBService {
       if (be == null) {
         await userNew.save();
         result = {
-          description: "El registyro fue exitoso",
-          type: "success",
-          message: "Success Tips",
+          message: "El registyro fue exitoso",
+          type: true,
         };
       } else {
         result = {
-          message: "Error",
-          type: "error",
-          description:
-            "El correo con el que intentas registrarte ya tiene una cuenta, ¿Olvido su contraseña?",
+          message:
+            "El correo con el que intentas registrarte ya esta registrado",
+          type: false,
         };
       }
       return result;
