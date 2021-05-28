@@ -54,7 +54,7 @@ export default function RouteGeneral({ info, showModal, setInfo }) {
           body: JSON.stringify({}),
         }
       ).then((res) => res.json());
-      router.reload();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -92,7 +92,7 @@ export default function RouteGeneral({ info, showModal, setInfo }) {
         <div>
           <div className={styles["div-route"]}>
             <div>
-              <strong>No tiene una ruta planeada</strong>
+              <h2>No tiene una ruta planeada o entregas cargadas</h2>
             </div>
           </div>
           <div className={styles["div-map-de"]}>

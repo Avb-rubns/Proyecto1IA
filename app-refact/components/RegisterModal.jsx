@@ -1,17 +1,13 @@
 import ReactDOM from "react-dom";
-import { Modal, Form, Row, Col, Input, Space, Button } from "antd";
+import { Modal, Form, Row, Col, Input, Space, Button, Alert } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import styles from "../styles/Login.module.css";
 import { useState } from "react";
-import { AlertRegister } from "../components/AlertRegister";
 export default function RegisterModal(props) {
-  let [visible, setVisible] = useState();
-  const handleClose = () => {
-    setVisible(false);
-  };
-  let description,
-    type,
-    message = "";
+  let [visible, setVisible] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
+
   const [formR, setForm] = useState({
     username: "",
     lastname: "",
@@ -47,11 +43,12 @@ export default function RegisterModal(props) {
         },
         body: JSON.stringify({ formR }),
       }).then((res) => res.json());
-      console.log(result);
-      setVisible(true);
-      message = result.message;
-      type = result.type;
-      description = result.description;
+      setMessage(result.result.message);
+      if (!result.result.type) {
+        setError(true);
+      } else {
+        setVisible(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -68,13 +65,9 @@ export default function RegisterModal(props) {
         width={"100vh"}
       >
         {visible && (
-          <AlertRegister
-            message={message}
-            description={description}
-            type={type}
-            afterClose={handleClose}
-          />
+          <Alert message={message} type="success" showIcon closable />
         )}
+        {error && <Alert message={message} type="error" showIcon closable />}
         <Form
           name="register"
           initialValues={{ remember: true }}
